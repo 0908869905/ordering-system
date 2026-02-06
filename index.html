@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FairDay Eats - 園遊會點餐系統</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+      body {
+        font-family: 'Noto Sans TC', sans-serif;
+        background-color: #f3f4f6;
+      }
+      @keyframes pulse-green {
+        0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+        70% { box-shadow: 0 0 0 10px rgba(34, 197, 94, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+      }
+      .animate-pulse-green {
+        animation: pulse-green 2s infinite;
+      }
+      @keyframes pulse-red {
+        0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); border-color: rgba(239, 68, 68, 0.8); }
+        70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); border-color: rgba(239, 68, 68, 0.2); }
+        100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); border-color: rgba(239, 68, 68, 0.8); }
+      }
+      .animate-pulse-red {
+        animation: pulse-red 1.5s infinite;
+      }
+      @keyframes gentle-breath {
+        0%, 100% { transform: scale(1); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+        50% { transform: scale(1.02); box-shadow: 0 20px 25px -5px rgba(79, 70, 229, 0.3); }
+      }
+      .animate-breath {
+        animation: gentle-breath 3s ease-in-out infinite;
+      }
+      @keyframes marquee {
+        0% { transform: translateX(100%); }
+        100% { transform: translateX(-100%); }
+      }
+      .animate-marquee {
+        animation: marquee 25s linear infinite;
+      }
+      /* Focus visibility for accessibility */
+      button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible {
+        outline: 2px solid #2563eb;
+        outline-offset: 2px;
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.1/",
+    "react/": "https://aistudiocdn.com/react@^19.2.1/",
+    "react": "https://aistudiocdn.com/react@^19.2.1",
+    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.556.0",
+    "@vitejs/plugin-react": "https://aistudiocdn.com/@vitejs/plugin-react@^5.1.1",
+    "vite": "https://aistudiocdn.com/vite@^7.2.6",
+    "peerjs": "https://aistudiocdn.com/peerjs@^1.5.5"
+  }
+}
+</script>
+</head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>
