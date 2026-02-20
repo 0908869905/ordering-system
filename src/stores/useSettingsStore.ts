@@ -7,6 +7,7 @@ interface SettingsState {
   language: Language
   stallName: string
   passwordHash: string
+  passwordSalt: string
   isKitchenAuthenticated: boolean
   soundEnabled: boolean
   speechEnabled: boolean
@@ -17,6 +18,7 @@ interface SettingsState {
   setLanguage: (lang: Language) => void
   setStallName: (name: string) => void
   setPasswordHash: (hash: string) => void
+  setPasswordSalt: (salt: string) => void
   setKitchenAuthenticated: (auth: boolean) => void
   setSoundEnabled: (enabled: boolean) => void
   setSpeechEnabled: (enabled: boolean) => void
@@ -31,6 +33,7 @@ export const useSettingsStore = create<SettingsState>()(
       language: 'zh',
       stallName: '宏麵屋',
       passwordHash: DEFAULT_PASSWORD_HASH,
+      passwordSalt: '',
       isKitchenAuthenticated: false,
       soundEnabled: true,
       speechEnabled: true,
@@ -41,6 +44,7 @@ export const useSettingsStore = create<SettingsState>()(
       setLanguage: (language) => set({ language }),
       setStallName: (stallName) => set({ stallName }),
       setPasswordHash: (passwordHash) => set({ passwordHash }),
+      setPasswordSalt: (passwordSalt) => set({ passwordSalt }),
       setKitchenAuthenticated: (isKitchenAuthenticated) => set({ isKitchenAuthenticated }),
       setSoundEnabled: (soundEnabled) => set({ soundEnabled }),
       setSpeechEnabled: (speechEnabled) => set({ speechEnabled }),
@@ -54,6 +58,7 @@ export const useSettingsStore = create<SettingsState>()(
         language: state.language,
         stallName: state.stallName,
         passwordHash: state.passwordHash,
+        passwordSalt: state.passwordSalt,
         soundEnabled: state.soundEnabled,
         speechEnabled: state.speechEnabled,
         volume: state.volume,

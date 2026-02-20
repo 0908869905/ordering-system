@@ -10,6 +10,7 @@ import {
   DialogDescription,
 } from '@/components/ui/dialog'
 import { useCartStore } from '@/stores/useCartStore'
+import { localized } from '@/lib/utils'
 import type { MenuItem, MenuOption, Language } from '@/types'
 import type { Translations } from '@/constants'
 
@@ -26,7 +27,7 @@ export default function ItemDetail({ t, item, language, onClose }: Props) {
   const [selectedOptions, setSelectedOptions] = useState<MenuOption[]>([])
   const [notes, setNotes] = useState('')
 
-  const name = language === 'en' && item.nameEn ? item.nameEn : item.name
+  const name = localized(language, item.name, item.nameEn)
   const optionsTotal = selectedOptions.reduce((sum, o) => sum + o.price, 0)
   const subtotal = (item.price + optionsTotal) * quantity
 
@@ -63,9 +64,7 @@ export default function ItemDetail({ t, item, language, onClose }: Props) {
 
         {item.description && (
           <p className="text-sm text-[hsl(var(--muted-foreground))]">
-            {language === 'en' && item.descriptionEn
-              ? item.descriptionEn
-              : item.description}
+            {localized(language, item.description ?? '', item.descriptionEn)}
           </p>
         )}
 
@@ -75,10 +74,7 @@ export default function ItemDetail({ t, item, language, onClose }: Props) {
             <h4 className="mb-2 font-medium">{t.options}</h4>
             <div className="flex flex-col gap-2">
               {item.options.map((option) => {
-                const optName =
-                  language === 'en' && option.nameEn
-                    ? option.nameEn
-                    : option.name
+                const optName = localized(language, option.name, option.nameEn)
                 const isSelected = selectedOptions.some(
                   (o) => o.id === option.id
                 )

@@ -1,5 +1,46 @@
 # 現場點餐系統 - 進度追蹤
 
+## Session: 2026-02-20 - MPA 架構遷移 + 跨分頁同步修復
+
+### 完成項目
+- [x] SPA → MPA 多頁面架構遷移（4 個獨立入口：landing、customer、kitchen、queue）
+- [x] Landing 頁面改版（簡化為只顯示「開始點餐」按鈕）
+- [x] 自訂日式提燈動畫 SVG 圖示
+- [x] 修復 MPA 跨分頁即時同步問題（廚房修改菜單/庫存後，顧客和叫號頁面不會即時更新）
+- [x] `npm run build` 通過
+- [x] 已 push 到遠端
+
+### 修改檔案
+- `src/main-landing.tsx` - 新建：Landing 頁面獨立入口
+- `src/main-customer.tsx` - 新建：顧客端獨立入口，加入 useBroadcastListener
+- `src/main-kitchen.tsx` - 新建：廚房端獨立入口
+- `src/main-queue.tsx` - 新建：叫號端獨立入口，加入 useBroadcastListener
+- `src/hooks/useBroadcastListener.ts` - 新建：輕量 BroadcastChannel 監聽 hook，接收廚房端的 inventory/menu 同步訊息
+- `src/components/kitchen/KitchenView.tsx` - 用 useMenuStore.subscribe 自動偵測 store 變化，觸發 broadcastInventorySync/broadcastMenuSync
+- `src/components/landing/LandingPage.tsx` - 改版為只顯示「開始點餐」按鈕
+
+### 修復細節：MPA 跨分頁即時同步
+- **問題**：廚房修改菜單/庫存（如標記完售）後，顧客和叫號頁面不會即時更新
+- **根因**：
+  1. InventoryPanel/MenuEditor 直接修改 Zustand store，但不呼叫 broadcastInventorySync/broadcastMenuSync
+  2. 顧客端/叫號端沒有 BroadcastChannel 監聯器
+- **解決**：
+  1. KitchenView 用 useMenuStore.subscribe 自動偵測 store 變化 → 觸發 broadcast
+  2. 新增 useBroadcastListener hook → Customer/Queue 入口掛載
+
+### Commits
+- `88eb6f4` - feat: SPA 轉 MPA 多頁面架構 + Landing 頁面改版
+- `cb16e14` - fix: 修復 MPA 跨分頁即時同步問題
+
+### 5-Question Reboot Check
+1. **做什麼？** MPA 架構遷移並修復跨分頁即時同步問題
+2. **進度？** 100% 完成 — 兩個 commit 已 push
+3. **下一步？** (1) 替換 PWA placeholder 圖示 (2) 真實裝置多設備 P2P 同步測試 (3) MPA 各頁面的 PWA 離線快取驗證 (4) 考慮 PeerJS 跨裝置同步是否也有類似問題需修復
+4. **阻礙？** PWA 圖示仍為 placeholder；MPA 架構下 PeerJS 跨裝置同步尚未完整測試
+5. **檔案？** `src/hooks/useBroadcastListener.ts`（BroadcastChannel 監聽）、`src/components/kitchen/KitchenView.tsx`（自動 broadcast 邏輯）、`src/main-customer.tsx` 和 `src/main-queue.tsx`（MPA 入口）
+
+---
+
 ## Session: 2026-02-07 (2) - 宏麵屋品牌主題改造
 
 ### 完成項目

@@ -657,6 +657,42 @@ JS bundle 主要組成：React + ReactDOM (~140 KB), PeerJS (~80 KB), Radix UI (
 
 **選擇理由**：比 Context/Provider 更輕量，且 Tailwind CSS 4 原生支援 `dark:` variant 搭配 class 策略。
 
+---
+
+## 8. MPA 架構遷移與跨分頁同步 (2026-02-20)
+
+> SPA → MPA 多頁面架構遷移過程中的技術發現。
+
+### 8.1 MPA 架構下的 BroadcastChannel 同步缺陷
+
+**問題**：從 SPA 遷移為 MPA（每個角色一個獨立 HTML 入口）後，廚房端修改菜單/庫存（如標記完售），顧客端和叫號端不會即時更新，需重新載入。
+
+**原因**：
+1. **廚房端缺少 broadcast 觸發**：InventoryPanel 和 MenuEditor 直接呼叫 Zustand store 的 action（如 `toggleSoldOut`、`updateMenuItem`），但這些 action 不會自動觸發 BroadcastChannel 廣播。之前 SPA 架構下所有元件共享同一個 Zustand store 實例，不需要跨分頁同步。
+2. **Client 端缺少 BroadcastChannel 監聽器**：MPA 架構下每個頁面是獨立的 JavaScript 上下文，顧客端和叫號端的入口（`main-customer.tsx`、`main-queue.tsx`）沒有設置 BroadcastChannel 的 `onmessage` 監聽器。
+
+**解決方案**：
+1. **廚房端**：在 KitchenView 使用 `useMenuStore.subscribe()` 監聽 store 變化，當偵測到 menuItems 陣列變更時，自動呼叫 `broadcastInventorySync()` 和 `broadcastMenuSync()` 廣播給所有同裝置分頁。
+2. **Client 端**：新增 `useBroadcastListener` hook，監聯 BroadcastChannel 的 `inventory-sync` 和 `menu-sync` 訊息類型，收到後更新本地 Zustand store。
+
+**選擇理由**：
+- 使用 `useMenuStore.subscribe()` 而非在每個 action 中手動呼叫 broadcast，因為這是「一處修改，全域生效」的模式，不會遺漏任何修改路徑。
+- 將 BroadcastChannel 監聽邏輯封裝為獨立 hook（`useBroadcastListener`），而非嵌入各元件中，保持關注點分離。
+
+### 8.2 SPA → MPA 遷移的關鍵考量
+
+**問題**：原本的 SPA 架構使用 React Router 在單一頁面中切換視圖，改為 MPA 後每個角色有獨立入口（`/landing.html`、`/customer.html`、`/kitchen.html`、`/queue.html`）。
+
+**遷移要點**：
+- Vite 多入口配置：`build.rollupOptions.input` 指定多個 HTML 入口
+- 每個入口檔有自己的 `main-*.tsx`，獨立掛載 React 根元件
+- 跨頁面導航改為 `window.location.href` 或 `<a>` 標籤，不再使用 React Router
+- **重要**：MPA 架構下，狀態管理（Zustand persist）透過 localStorage 共享，但 Zustand store 實例是獨立的。因此需要 BroadcastChannel 來通知其他分頁更新 store。
+
+**選擇理由**：MPA 架構讓每個角色頁面可以獨立載入、獨立快取，適合現場點餐場景中不同裝置開啟不同頁面（如平板開廚房頁、手機開顧客頁、電視開叫號頁）。
+
+---
+
 ### 7.5 日式裝飾圖案的 CSS 實現
 
 **問題**：青海波（seigaiha）、雲紋等日式圖案傳統上使用圖片，但圖片會增加 bundle 大小且不易調整顏色。

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { cn } from '@/lib/utils'
+import { cn, localized } from '@/lib/utils'
 import type { Category, MenuItem, Language } from '@/types'
 import type { Translations } from '@/constants'
 import MenuItemCard from './MenuItemCard'
@@ -60,7 +60,7 @@ export default function MenuGrid({ t, categories, items, language }: Props) {
                 : 'bg-warm-100 text-warm-700 hover:bg-warm-200'
             )}
           >
-            {language === 'en' && cat.nameEn ? cat.nameEn : cat.name}
+            {localized(language, cat.name, cat.nameEn)}
           </button>
         ))}
       </div>
@@ -75,9 +75,7 @@ export default function MenuGrid({ t, categories, items, language }: Props) {
               <div className="flex items-center gap-3 mb-3">
                 <div className="h-px flex-1 bg-gradient-to-r from-transparent to-primary-200" />
                 <h2 className="font-heading text-lg font-semibold text-warm-800 shrink-0">
-                  {language === 'en' && group.category.nameEn
-                    ? group.category.nameEn
-                    : group.category.name}
+                  {localized(language, group.category.name, group.category.nameEn)}
                 </h2>
                 <div className="h-px flex-1 bg-gradient-to-l from-transparent to-primary-200" />
               </div>

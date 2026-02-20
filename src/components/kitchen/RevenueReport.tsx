@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useOrderStore } from '@/stores/useOrderStore'
+import { localized } from '@/lib/utils'
 import type { Language } from '@/types'
 import type { Translations } from '@/constants'
 
@@ -142,8 +143,7 @@ export default function RevenueReport({ t, language }: Props) {
           <CardContent>
             <div className="space-y-2">
               {stats.topItems.map((item, idx) => {
-                const name =
-                  language === 'en' && item.nameEn ? item.nameEn : item.name
+                const name = localized(language, item.name, item.nameEn)
                 const widthPercent =
                   (item.quantity / (stats.topItems[0]?.quantity ?? 1)) * 100
                 return (

@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import type { CartItem, MenuOption } from '@/types'
+import { generateId } from '@/lib/utils'
 
 interface CartState {
   items: CartItem[]
@@ -20,11 +21,7 @@ interface CartState {
   getItemCount: () => number
 }
 
-function generateId() {
-  return `cart-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`
-}
-
-function calcSubtotal(price: number, quantity: number, options: MenuOption[]) {
+function calcSubtotal(price: number, quantity: number, options: MenuOption[]): number {
   const optionsTotal = options.reduce((sum, o) => sum + o.price, 0)
   return (price + optionsTotal) * quantity
 }
@@ -58,7 +55,7 @@ export const useCartStore = create<CartState>()((set, get) => ({
       })
     } else {
       const newItem: CartItem = {
-        id: generateId(),
+        id: generateId('cart'),
         menuItemId: params.menuItemId,
         name: params.name,
         nameEn: params.nameEn,

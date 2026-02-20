@@ -11,16 +11,13 @@ import {
   DialogDescription,
 } from '@/components/ui/dialog'
 import { useMenuStore } from '@/stores/useMenuStore'
+import { generateId, localized } from '@/lib/utils'
 import type { Category, MenuItem, MenuOption, Language } from '@/types'
 import type { Translations } from '@/constants'
 
 interface Props {
   t: Translations
   language: Language
-}
-
-function generateId() {
-  return `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`
 }
 
 export default function MenuEditor({ t, language }: Props) {
@@ -115,7 +112,7 @@ export default function MenuEditor({ t, language }: Props) {
     setItemOptions((prev) => [
       ...prev,
       {
-        id: `opt-${generateId()}`,
+        id: generateId('opt'),
         name: newOptName.trim(),
         nameEn: newOptNameEn.trim() || undefined,
         price: parseInt(newOptPrice) || 0,
@@ -163,8 +160,7 @@ export default function MenuEditor({ t, language }: Props) {
         const catItems = items
           .filter((i) => i.categoryId === cat.id)
           .sort((a, b) => a.order - b.order)
-        const catDisplayName =
-          language === 'en' && cat.nameEn ? cat.nameEn : cat.name
+        const catDisplayName = localized(language, cat.name, cat.nameEn)
 
         return (
           <Card key={cat.id} className="mb-4">
@@ -196,8 +192,7 @@ export default function MenuEditor({ t, language }: Props) {
             <CardContent className="pt-0">
               <div className="flex flex-col gap-2">
                 {catItems.map((item) => {
-                  const displayName =
-                    language === 'en' && item.nameEn ? item.nameEn : item.name
+                  const displayName = localized(language, item.name, item.nameEn)
                   return (
                     <div
                       key={item.id}

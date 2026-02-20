@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import { Clock } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button, type ButtonProps } from '@/components/ui/button'
+import { localized } from '@/lib/utils'
 import type { Order, Language } from '@/types'
 import type { Translations } from '@/constants'
 
@@ -30,12 +31,12 @@ export default function OrderCard({
     return Math.floor((Date.now() - order.createdAt) / 60000)
   }, [order.createdAt])
 
-  const waitColor =
-    waitMinutes > 10
-      ? 'text-[hsl(var(--destructive))]'
-      : waitMinutes > 5
-        ? 'text-amber-600'
-        : 'text-[hsl(var(--muted-foreground))]'
+  let waitColor = 'text-[hsl(var(--muted-foreground))]'
+  if (waitMinutes > 10) {
+    waitColor = 'text-[hsl(var(--destructive))]'
+  } else if (waitMinutes > 5) {
+    waitColor = 'text-amber-600'
+  }
 
   return (
     <Card className="overflow-hidden bg-[#2e2a22] border-l-[3px] border-l-current">
@@ -52,8 +53,7 @@ export default function OrderCard({
         {/* Items */}
         <div className="mb-2 space-y-1 text-sm">
           {order.items.map((item, idx) => {
-            const name =
-              language === 'en' && item.nameEn ? item.nameEn : item.name
+            const name = localized(language, item.name, item.nameEn)
             return (
               <div key={idx} className="flex justify-between">
                 <span>
@@ -62,9 +62,7 @@ export default function OrderCard({
                     <span className="ml-1 text-xs text-[hsl(var(--muted-foreground))]">
                       (
                       {item.selectedOptions
-                        .map((o) =>
-                          language === 'en' && o.nameEn ? o.nameEn : o.name
-                        )
+                        .map((o) => localized(language, o.name, o.nameEn))
                         .join(', ')}
                       )
                     </span>

@@ -2,6 +2,7 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import type { Category, MenuItem } from '@/types'
 import { defaultCategories, defaultMenuItems } from '@/constants'
+import { generateId } from '@/lib/utils'
 
 interface MenuState {
   categories: Category[]
@@ -30,10 +31,6 @@ interface MenuState {
   replaceAll: (categories: Category[], items: MenuItem[]) => void
 }
 
-function generateId() {
-  return `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`
-}
-
 export const useMenuStore = create<MenuState>()(
   persist(
     (set, get) => ({
@@ -45,7 +42,7 @@ export const useMenuStore = create<MenuState>()(
         const { categories } = get()
         const newCategory: Category = {
           ...data,
-          id: `cat-${generateId()}`,
+          id: generateId('cat'),
           order: categories.length,
         }
         set({ categories: [...categories, newCategory] })
@@ -82,7 +79,7 @@ export const useMenuStore = create<MenuState>()(
         const categoryItems = items.filter((i) => i.categoryId === data.categoryId)
         const newItem: MenuItem = {
           ...data,
-          id: `item-${generateId()}`,
+          id: generateId('item'),
           order: categoryItems.length,
         }
         set({ items: [...items, newItem] })

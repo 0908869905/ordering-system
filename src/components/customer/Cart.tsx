@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { X, Minus, Plus, Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useCartStore } from '@/stores/useCartStore'
+import { localized } from '@/lib/utils'
 import type { Language } from '@/types'
 import type { Translations } from '@/constants'
 
@@ -67,8 +68,7 @@ export default function Cart({ t, language, onClose, onSubmit }: Props) {
       <div className="flex-1 overflow-y-auto p-4">
         <div className="flex flex-col gap-3">
           {items.map((item) => {
-            const name =
-              language === 'en' && item.nameEn ? item.nameEn : item.name
+            const name = localized(language, item.name, item.nameEn)
             return (
               <div
                 key={item.id}
@@ -81,9 +81,7 @@ export default function Cart({ t, language, onClose, onSubmit }: Props) {
                       <p className="text-xs text-[hsl(var(--muted-foreground))]">
                         +{' '}
                         {item.selectedOptions
-                          .map((o) =>
-                            language === 'en' && o.nameEn ? o.nameEn : o.name
-                          )
+                          .map((o) => localized(language, o.name, o.nameEn))
                           .join(', ')}
                       </p>
                     )}
@@ -163,9 +161,7 @@ export default function Cart({ t, language, onClose, onSubmit }: Props) {
               {items.map((item) => (
                 <div key={item.id} className="flex justify-between py-1">
                   <span>
-                    {language === 'en' && item.nameEn
-                      ? item.nameEn
-                      : item.name}{' '}
+                    {localized(language, item.name, item.nameEn)}{' '}
                     x{item.quantity}
                   </span>
                   <span>${item.subtotal}</span>

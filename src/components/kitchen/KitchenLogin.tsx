@@ -3,28 +3,21 @@ import { ChefHat, ArrowLeft } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useSettingsStore } from '@/stores/useSettingsStore'
+import { hashPassword } from '@/lib/crypto'
 import type { Translations } from '@/constants'
 
 interface Props {
   t: Translations
 }
 
-async function hashPassword(password: string): Promise<string> {
-  const encoder = new TextEncoder()
-  const data = encoder.encode(password)
-  const hashBuffer = await crypto.subtle.digest('SHA-256', data)
-  const hashArray = Array.from(new Uint8Array(hashBuffer))
-  return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('')
-}
-
 export default function KitchenLogin({ t }: Props) {
-  const { passwordHash, setKitchenAuthenticated } =
+  const { passwordHash, passwordSalt, setKitchenAuthenticated } =
     useSettingsStore()
   const [password, setPassword] = useState('')
   const [error, setError] = useState(false)
 
   const handleLogin = async () => {
-    const hash = await hashPassword(password)
+    const hash = await hashPassword(password, passwordSalt)
     if (hash === passwordHash) {
       setKitchenAuthenticated(true)
       setError(false)
@@ -74,7 +67,7 @@ export default function KitchenLogin({ t }: Props) {
       </div>
 
       <p className="text-xs text-[hsl(var(--muted-foreground))]">
-        預設密碼: 1234
+        {t.contactAdmin}
       </p>
     </div>
   )

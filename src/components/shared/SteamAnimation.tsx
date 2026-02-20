@@ -4,12 +4,12 @@ interface Props {
 }
 
 export default function SteamAnimation({ size = 'md', className = '' }: Props) {
-  const sizeClass =
-    size === 'sm'
-      ? 'steam-animation-sm'
-      : size === 'lg'
-        ? 'steam-animation-lg'
-        : 'w-[48px] h-[64px]'
+  const sizeClasses: Record<string, string> = {
+    sm: 'steam-animation-sm',
+    md: 'w-[48px] h-[64px]',
+    lg: 'steam-animation-lg',
+  }
+  const sizeClass = sizeClasses[size]
 
   return (
     <svg

@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import type { CartItem, Order, OrderStatus } from '@/types'
+import { generateId } from '@/lib/utils'
 
 interface RevenueAdjustment {
   id: string
@@ -16,7 +17,6 @@ interface OrderState {
 
   createOrder: (items: CartItem[], totalAmount: number) => Order
   updateOrderStatus: (id: string, status: OrderStatus) => void
-  cancelOrder: (id: string) => void
   getOrdersByStatus: (status: OrderStatus) => Order[]
   getActiveOrders: () => Order[]
   getCompletedOrders: () => Order[]
@@ -25,10 +25,6 @@ interface OrderState {
   resetOrders: () => void
   resetCounter: () => void
   replaceAll: (orders: Order[], nextOrderNumber: number) => void
-}
-
-function generateId() {
-  return `order-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`
 }
 
 export const useOrderStore = create<OrderState>()(
@@ -41,7 +37,7 @@ export const useOrderStore = create<OrderState>()(
       createOrder: (items, totalAmount) => {
         const { nextOrderNumber } = get()
         const newOrder: Order = {
-          id: generateId(),
+          id: generateId('order'),
           orderNumber: nextOrderNumber,
           items,
           totalAmount,
@@ -56,21 +52,20 @@ export const useOrderStore = create<OrderState>()(
       },
 
       updateOrderStatus: (id, status) => {
+        const now = Date.now()
+        const timestampKey: Partial<Record<OrderStatus, keyof Order>> = {
+          paid: 'paidAt',
+          completed: 'completedAt',
+          picked_up: 'pickedUpAt',
+          cancelled: 'cancelledAt',
+        }
         set({
           orders: get().orders.map((o) => {
             if (o.id !== id) return o
-            const update: Partial<Order> = { status }
-            if (status === 'paid') update.paidAt = Date.now()
-            if (status === 'completed') update.completedAt = Date.now()
-            if (status === 'picked_up') update.pickedUpAt = Date.now()
-            if (status === 'cancelled') update.cancelledAt = Date.now()
-            return { ...o, ...update }
+            const key = timestampKey[status]
+            return { ...o, status, ...(key ? { [key]: now } : {}) }
           }),
         })
-      },
-
-      cancelOrder: (id) => {
-        get().updateOrderStatus(id, 'cancelled')
       },
 
       getOrdersByStatus: (status) => {
@@ -91,7 +86,7 @@ export const useOrderStore = create<OrderState>()(
 
       addRevenueAdjustment: (amount, reason) => {
         const adj: RevenueAdjustment = {
-          id: `adj-${Date.now()}`,
+          id: generateId('adj'),
           amount,
           reason,
           createdAt: Date.now(),

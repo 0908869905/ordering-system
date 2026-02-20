@@ -16,12 +16,14 @@ src/
 │   ├── queue/            # 叫號端 (QueueView)
 │   └── shared/           # 共用 (ConnectionStatus, SteamAnimation, WaveDivider, CloudDivider, JapaneseFrame, RamenBowlIcon)
 ├── stores/               # Zustand stores (useMenuStore, useCartStore, useOrderStore, useSettingsStore)
-├── hooks/                # usePeerSync, useSound, useSpeech
+├── hooks/                # usePeerSync, useSound, useSpeech, useBroadcastListener
 ├── lib/                  # utils (cn), peer (PeerService + BroadcastChannel)
 ├── types/                # TypeScript 型別
 ├── constants/            # 翻譯 (zh/en)、預設菜單
-├── App.tsx
-└── main.tsx
+├── main-landing.tsx      # MPA 入口：首頁
+├── main-customer.tsx     # MPA 入口：顧客端（含 BroadcastChannel 監聽）
+├── main-kitchen.tsx      # MPA 入口：廚房端
+└── main-queue.tsx        # MPA 入口：叫號端（含 BroadcastChannel 監聯）
 ```
 
 ## 常用指令
@@ -37,10 +39,12 @@ npm run preview
 ```
 
 ## 關鍵設計決策
+- **MPA 多頁面架構**：每個角色（landing/customer/kitchen/queue）有獨立 HTML 入口，Vite 多入口建置
 - **Single-Writer 模式**：Kitchen 為唯一資料權威來源
 - **P2P 架構**：Kitchen 作為 Host，Customer/Queue 作為 Client
-- **同步策略**：PeerJS (跨設備) + BroadcastChannel (同裝置分頁)
-- **持久化**：Zustand persist → localStorage
+- **同步策略**：PeerJS (跨設備) + BroadcastChannel (同裝置跨分頁)
+- **BroadcastChannel 自動同步**：KitchenView 用 `useMenuStore.subscribe()` 偵測 store 變化自動 broadcast；Customer/Queue 用 `useBroadcastListener` hook 監聽
+- **持久化**：Zustand persist → localStorage（MPA 各頁面共享 localStorage，但 store 實例獨立）
 - **密碼保護**：SHA-256 雜湊，預設密碼 `1234`
 - **翻譯型別**：`Translations = { [K in keyof typeof translations.zh]: string }` 解決字面量衝突
 

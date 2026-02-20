@@ -5,18 +5,24 @@ import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { useSettingsStore } from '@/stores/useSettingsStore'
 import { useOrderStore } from '@/stores/useOrderStore'
+import { hashPassword, generateSalt, MIN_PASSWORD_LENGTH } from '@/lib/crypto'
 import type { Translations } from '@/constants'
 
 interface Props {
   t: Translations
 }
 
-async function hashPassword(password: string): Promise<string> {
-  const encoder = new TextEncoder()
-  const data = encoder.encode(password)
-  const hashBuffer = await crypto.subtle.digest('SHA-256', data)
-  const hashArray = Array.from(new Uint8Array(hashBuffer))
-  return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('')
+function ToggleSwitch({ checked, onChange }: { checked: boolean; onChange: () => void }) {
+  return (
+    <button
+      onClick={onChange}
+      className={`relative h-6 w-11 rounded-full transition-colors ${checked ? 'bg-primary-500' : 'bg-warm-300'}`}
+    >
+      <span
+        className={`absolute left-0.5 top-0.5 h-5 w-5 rounded-full bg-white transition-transform ${checked ? 'translate-x-5' : ''}`}
+      />
+    </button>
+  )
 }
 
 export default function KitchenSettings({ t }: Props) {
@@ -30,6 +36,7 @@ export default function KitchenSettings({ t }: Props) {
     volume,
     setVolume,
     setPasswordHash,
+    setPasswordSalt,
   } = useSettingsStore()
   const { resetOrders, resetCounter } = useOrderStore()
 
@@ -48,12 +55,18 @@ export default function KitchenSettings({ t }: Props) {
   const handleChangePassword = async () => {
     setPwdError('')
     setPwdSuccess(false)
+    if (!newPassword) return
+    if (newPassword.length < MIN_PASSWORD_LENGTH) {
+      setPwdError(t.passwordTooShort)
+      return
+    }
     if (newPassword !== confirmPwd) {
       setPwdError(t.passwordMismatch)
       return
     }
-    if (!newPassword) return
-    const hash = await hashPassword(newPassword)
+    const salt = generateSalt()
+    const hash = await hashPassword(newPassword, salt)
+    setPasswordSalt(salt)
     setPasswordHash(hash)
     setNewPassword('')
     setConfirmPwd('')
@@ -100,25 +113,11 @@ export default function KitchenSettings({ t }: Props) {
           <div className="flex flex-col gap-3">
             <div className="flex items-center justify-between">
               <span className="text-sm">{t.soundEnabled}</span>
-              <button
-                onClick={() => setSoundEnabled(!soundEnabled)}
-                className={`relative h-6 w-11 rounded-full transition-colors ${soundEnabled ? 'bg-primary-500' : 'bg-warm-300'}`}
-              >
-                <span
-                  className={`absolute left-0.5 top-0.5 h-5 w-5 rounded-full bg-white transition-transform ${soundEnabled ? 'translate-x-5' : ''}`}
-                />
-              </button>
+              <ToggleSwitch checked={soundEnabled} onChange={() => setSoundEnabled(!soundEnabled)} />
             </div>
             <div className="flex items-center justify-between">
               <span className="text-sm">{t.speechEnabled}</span>
-              <button
-                onClick={() => setSpeechEnabled(!speechEnabled)}
-                className={`relative h-6 w-11 rounded-full transition-colors ${speechEnabled ? 'bg-primary-500' : 'bg-warm-300'}`}
-              >
-                <span
-                  className={`absolute left-0.5 top-0.5 h-5 w-5 rounded-full bg-white transition-transform ${speechEnabled ? 'translate-x-5' : ''}`}
-                />
-              </button>
+              <ToggleSwitch checked={speechEnabled} onChange={() => setSpeechEnabled(!speechEnabled)} />
             </div>
             <div className="flex items-center gap-3">
               <span className="text-sm">{t.volume}</span>

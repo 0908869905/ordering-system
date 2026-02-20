@@ -39,19 +39,12 @@ export default function ConnectionStatus({
   const [copied, setCopied] = useState(false)
   const [error, setError] = useState('')
 
-  const stateColor =
-    connectionState === 'connected'
-      ? 'bg-[hsl(var(--success))]'
-      : connectionState === 'connecting'
-        ? 'bg-[hsl(var(--warning))]'
-        : 'bg-gray-400'
-
-  const stateText =
-    connectionState === 'connected'
-      ? t.connected
-      : connectionState === 'connecting'
-        ? t.connecting
-        : t.disconnected
+  const stateMap: Record<ConnectionState, { color: string; text: string }> = {
+    connected: { color: 'bg-[hsl(var(--success))]', text: t.connected },
+    connecting: { color: 'bg-[hsl(var(--warning))]', text: t.connecting },
+    disconnected: { color: 'bg-gray-400', text: t.disconnected },
+  }
+  const { color: stateColor, text: stateText } = stateMap[connectionState]
 
   const handleCopyId = async () => {
     if (peerId) {
@@ -106,11 +99,13 @@ export default function ConnectionStatus({
           <div className="flex flex-col gap-4">
             {/* Status */}
             <div className="flex items-center gap-2">
-              {connectionState === 'connected' ? (
+              {connectionState === 'connected' && (
                 <Wifi className="h-5 w-5 text-[hsl(var(--success))]" />
-              ) : connectionState === 'connecting' ? (
+              )}
+              {connectionState === 'connecting' && (
                 <Loader2 className="h-5 w-5 animate-spin text-[hsl(var(--warning))]" />
-              ) : (
+              )}
+              {connectionState === 'disconnected' && (
                 <WifiOff className="h-5 w-5 text-gray-400" />
               )}
               <span className="font-medium">{stateText}</span>

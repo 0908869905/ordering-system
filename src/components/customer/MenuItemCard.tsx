@@ -2,6 +2,7 @@ import { Plus } from 'lucide-react'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { useCartStore } from '@/stores/useCartStore'
+import { localized } from '@/lib/utils'
 import type { MenuItem, Language } from '@/types'
 import type { Translations } from '@/constants'
 
@@ -14,7 +15,7 @@ interface Props {
 
 export default function MenuItemCard({ item, language, t, onClick }: Props) {
   const addItem = useCartStore((s) => s.addItem)
-  const name = language === 'en' && item.nameEn ? item.nameEn : item.name
+  const name = localized(language, item.name, item.nameEn)
   const isSoldOut = !item.available || item.stock === 0
 
   const handleQuickAdd = (e: React.MouseEvent) => {
@@ -49,7 +50,7 @@ export default function MenuItemCard({ item, language, t, onClick }: Props) {
         </div>
         {item.description && (
           <p className="mt-1 text-xs text-warm-500 line-clamp-1">
-            {language === 'en' && item.descriptionEn ? item.descriptionEn : item.description}
+            {localized(language, item.description, item.descriptionEn)}
           </p>
         )}
         <div className="mt-2 flex items-center justify-between">

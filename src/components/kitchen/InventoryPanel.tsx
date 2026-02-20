@@ -5,12 +5,23 @@ import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
 import { useMenuStore } from '@/stores/useMenuStore'
+import { localized } from '@/lib/utils'
 import type { Language } from '@/types'
 import type { Translations } from '@/constants'
 
 interface Props {
   t: Translations
   language: Language
+}
+
+function getStockBadgeVariant(
+  available: boolean,
+  stock: number
+): 'destructive' | 'secondary' | 'warning' | 'success' {
+  if (!available) return 'destructive'
+  if (stock === -1) return 'secondary'
+  if (stock <= 5) return 'warning'
+  return 'success'
 }
 
 export default function InventoryPanel({ t, language }: Props) {
@@ -60,12 +71,11 @@ export default function InventoryPanel({ t, language }: Props) {
         return (
           <div key={cat.id} className="mb-6">
             <h3 className="mb-2 font-semibold text-[hsl(var(--muted-foreground))]">
-              {language === 'en' && cat.nameEn ? cat.nameEn : cat.name}
+              {localized(language, cat.name, cat.nameEn)}
             </h3>
             <div className="flex flex-col gap-2">
               {catItems.map((item) => {
-                const name =
-                  language === 'en' && item.nameEn ? item.nameEn : item.name
+                const name = localized(language, item.name, item.nameEn)
                 return (
                   <Card key={item.id}>
                     <CardContent className="flex items-center gap-3 p-3">
@@ -102,13 +112,7 @@ export default function InventoryPanel({ t, language }: Props) {
                         <div className="flex items-center gap-2">
                           <Badge
                             variant={
-                              !item.available
-                                ? 'destructive'
-                                : item.stock === -1
-                                  ? 'secondary'
-                                  : item.stock <= 5
-                                    ? 'warning'
-                                    : 'success'
+                              getStockBadgeVariant(item.available, item.stock)
                             }
                             className="cursor-pointer"
                             onClick={() => {
