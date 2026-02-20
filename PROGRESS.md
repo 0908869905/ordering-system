@@ -1,5 +1,49 @@
 # 現場點餐系統 - 進度追蹤
 
+## Session: 2026-02-20 (2) - 安全掃描修復 + 程式碼簡化
+
+### 完成項目
+- [x] npm audit 漏洞修復：overrides minimatch >=10.2.1，0 vulnerabilities
+- [x] P2P payload 驗證：usePeerSync.ts 加入 5 個型別驗證函式，防止惡意/畸形資料
+- [x] 密碼加鹽：新建 src/lib/crypto.ts（hashPassword + generateSalt），向下相容無鹽模式
+- [x] 移除密碼提示：「預設密碼: 1234」改為「請洽管理員取得密碼」
+- [x] 密碼複雜度：MIN_PASSWORD_LENGTH = 4
+- [x] hashPassword 去重：KitchenLogin + KitchenSettings 改用共用 crypto.ts
+- [x] 共用工具函式：generateId() + localized() 消除 20 處重複
+- [x] syncHandlers.ts：統一 P2P/BroadcastChannel 訊息處理邏輯
+- [x] usePeerSync 簡化：handleMessage 40+ 行縮減為 4 行
+- [x] useBroadcastListener 簡化：62 行縮減為 18 行
+- [x] 元件簡化：ToggleSwitch 抽取、stateMap/sizeClasses lookup 取代 ternary
+- [x] stores 簡化：移除重複 generateId，updateOrderStatus 用 lookup map
+- [x] `npm run build` 通過
+- [x] 已 push 到遠端
+
+### 修改檔案
+- `src/lib/crypto.ts` - 新建：hashPassword（加鹽 SHA-256）+ generateSalt 共用模組
+- `src/lib/syncHandlers.ts` - 新建：統一 P2P/BroadcastChannel 訊息處理邏輯
+- `src/hooks/usePeerSync.ts` - P2P payload 驗證函式 + handleMessage 簡化為 syncHandlers 呼叫
+- `src/hooks/useBroadcastListener.ts` - 62 行簡化為 18 行，改用 syncHandlers
+- `src/components/kitchen/KitchenLogin.tsx` - 移除內嵌 hashPassword，改用 crypto.ts；密碼提示改為「請洽管理員取得密碼」
+- `src/components/kitchen/KitchenSettings.tsx` - 移除內嵌 hashPassword，改用 crypto.ts；加入密碼複雜度驗證
+- `src/stores/useOrderStore.ts` - 移除重複 generateId，updateOrderStatus 用 lookup map
+- `src/stores/useMenuStore.ts` - 移除重複 generateId，改用共用 generateId
+- `src/stores/useCartStore.ts` - 移除重複 generateId，改用共用 generateId
+- `src/components/kitchen/OrderCard.tsx` - stateMap/sizeClasses lookup 取代 ternary
+- `src/components/kitchen/InventoryPanel.tsx` - ToggleSwitch 抽取簡化
+- `package.json` - overrides minimatch >=10.2.1 修復 npm audit 漏洞
+
+### Commits
+- `ab9de1e` - fix: 安全掃描修復 + 程式碼簡化
+
+### 5-Question Reboot Check
+1. **做什麼？** 安全掃描修復（npm audit、P2P payload 驗證、密碼加鹽）+ 程式碼簡化（共用工具函式、syncHandlers 統一訊息處理）
+2. **進度？** 100% 完成 — commit 已 push
+3. **下一步？** (1) 替換 PWA placeholder 圖示 (2) 真實裝置多設備 P2P 同步測試 (3) 密碼加鹽後的 migration 測試（確認舊密碼向下相容） (4) 考慮 CSP header 設定
+4. **阻礙？** PWA 圖示仍為 placeholder；PeerJS 使用公共信令伺服器；密碼加鹽的向下相容需要在真實環境驗證
+5. **檔案？** `src/lib/crypto.ts`（密碼加鹽邏輯）、`src/lib/syncHandlers.ts`（統一訊息處理）、`src/hooks/usePeerSync.ts`（P2P payload 驗證）、`src/components/kitchen/KitchenSettings.tsx`（密碼設定）
+
+---
+
 ## Session: 2026-02-20 - MPA 架構遷移 + 跨分頁同步修復
 
 ### 完成項目

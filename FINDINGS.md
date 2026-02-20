@@ -693,6 +693,63 @@ JS bundle 主要組成：React + ReactDOM (~140 KB), PeerJS (~80 KB), Radix UI (
 
 ---
 
+---
+
+## 9. 安全掃描修復與程式碼簡化 (2026-02-20)
+
+> 安全漏洞修復、P2P payload 驗證、密碼安全強化、程式碼 DRY 重構。
+
+### 9.1 P2P Payload 型別驗證
+
+**問題**：PeerJS DataChannel 接收的訊息未經驗證即直接使用，惡意或畸形資料可能導致 store 狀態損壞。
+
+**解決方案**：在 `usePeerSync.ts` 新增 5 個型別驗證函式（`isValidMenuItem`、`isValidOrder`、`isValidInventoryPayload` 等），在 `handleMessage` 中先驗證再處理。
+
+**選擇理由**：runtime 型別驗證比 TypeScript 編譯期型別更安全，因為 P2P 訊息來自外部，TypeScript 無法保證其結構。未採用 zod 等驗證庫是為了保持零額外依賴。
+
+### 9.2 密碼加鹽（Salt）向下相容設計
+
+**問題**：原本密碼只用 SHA-256 雜湊（無鹽），相同密碼產生相同 hash，存在彩虹表攻擊風險。
+
+**解決方案**：
+- 新建 `src/lib/crypto.ts`，`hashPassword(password, salt?)` 支援有鹽/無鹽兩種模式
+- `generateSalt()` 使用 `crypto.getRandomValues()` 產生隨機鹽值
+- KitchenSettings 儲存密碼時同時儲存 salt
+- KitchenLogin 驗證時：先用 salt 嘗試，失敗則用無鹽模式重試（向下相容）
+
+**選擇理由**：向下相容確保升級後舊密碼仍可登入，使用者首次更改密碼後自動升級為加鹽模式。使用 Web Crypto API (`crypto.subtle.digest`) 而非第三方庫。
+
+### 9.3 syncHandlers 統一訊息處理模式
+
+**問題**：P2P（usePeerSync）和 BroadcastChannel（useBroadcastListener）處理相同類型的訊息（inventory-sync、menu-sync、order-sync 等），但邏輯各自實作，維護時容易不一致。
+
+**解決方案**：新建 `src/lib/syncHandlers.ts`，將訊息處理邏輯統一為一組 handler 函式，usePeerSync 和 useBroadcastListener 都呼叫同一組 handler。
+
+**成效**：
+- usePeerSync 的 `handleMessage` 從 40+ 行縮減為 4 行
+- useBroadcastListener 從 62 行縮減為 18 行
+- 未來新增訊息類型只需在 syncHandlers 中加一處
+
+**選擇理由**：Single Source of Truth 原則 — 相同邏輯不應存在於兩處。
+
+### 9.4 npm audit 漏洞修復策略
+
+**問題**：`npm audit` 報告 minimatch 相關的 HIGH/MEDIUM 漏洞。
+
+**解決方案**：在 `package.json` 中使用 `overrides` 欄位強制指定 `minimatch >= 10.2.1`。
+
+**選擇理由**：漏洞位於間接依賴（transitive dependency），無法透過直接升級解決。`overrides` 是 npm 官方推薦的間接依賴版本覆寫機制，比 `npm audit fix --force` 更可控。
+
+### 9.5 共用工具函式消除重複
+
+**問題**：`generateId()` 在 3 個 store 中各自實作（邏輯相同），`localized()` 翻譯取值邏輯在多處重複。
+
+**解決方案**：將 `generateId()` 和 `localized()` 抽取為共用工具函式，20 處重複改為單一引用。
+
+**選擇理由**：DRY 原則。共用函式集中維護，若未來需更改 ID 生成策略（如改用 UUID v7），只需修改一處。
+
+---
+
 ### 7.5 日式裝飾圖案的 CSS 實現
 
 **問題**：青海波（seigaiha）、雲紋等日式圖案傳統上使用圖片，但圖片會增加 bundle 大小且不易調整顏色。

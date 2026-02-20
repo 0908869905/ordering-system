@@ -17,7 +17,7 @@ src/
 │   └── shared/           # 共用 (ConnectionStatus, SteamAnimation, WaveDivider, CloudDivider, JapaneseFrame, RamenBowlIcon)
 ├── stores/               # Zustand stores (useMenuStore, useCartStore, useOrderStore, useSettingsStore)
 ├── hooks/                # usePeerSync, useSound, useSpeech, useBroadcastListener
-├── lib/                  # utils (cn), peer (PeerService + BroadcastChannel)
+├── lib/                  # utils (cn + generateId + localized), peer (PeerService + BroadcastChannel), crypto (hashPassword + generateSalt), syncHandlers (統一 P2P/BC 訊息處理)
 ├── types/                # TypeScript 型別
 ├── constants/            # 翻譯 (zh/en)、預設菜單
 ├── main-landing.tsx      # MPA 入口：首頁
@@ -45,7 +45,7 @@ npm run preview
 - **同步策略**：PeerJS (跨設備) + BroadcastChannel (同裝置跨分頁)
 - **BroadcastChannel 自動同步**：KitchenView 用 `useMenuStore.subscribe()` 偵測 store 變化自動 broadcast；Customer/Queue 用 `useBroadcastListener` hook 監聽
 - **持久化**：Zustand persist → localStorage（MPA 各頁面共享 localStorage，但 store 實例獨立）
-- **密碼保護**：SHA-256 雜湊，預設密碼 `1234`
+- **密碼保護**：SHA-256 加鹽雜湊（src/lib/crypto.ts），向下相容無鹽模式
 - **翻譯型別**：`Translations = { [K in keyof typeof translations.zh]: string }` 解決字面量衝突
 
 ## 品牌主題系統
