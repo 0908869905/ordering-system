@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- 圓角方形背景 -->
+  <rect width="512" height="512" rx="96" fill="#a0522d"/>
+  <!-- 圓框（印章風） -->
+  <circle cx="256" cy="256" r="190" fill="none" stroke="#fff" stroke-width="16" opacity="0.9"/>
+  <!-- 拉麵碗 -->
+  <g transform="translate(256,280)" fill="#fff">
+    <!-- 碗身 -->
+    <ellipse cx="0" cy="0" rx="120" ry="36" fill="none" stroke="#fff" stroke-width="10"/>
+    <path d="M-120,0 C-120,70 -66,120 0,120 C66,120 120,70 120,0" fill="#fff" opacity="0.95"/>
+    <!-- 碗底座 -->
+    <rect x="-30" y="118" width="60" height="10" rx="5" fill="#fff"/>
+  </g>
+  <!-- 麵條 -->
+  <g fill="none" stroke="#a0522d" stroke-width="7" stroke-linecap="round">
+    <path d="M200,265 Q220,230 210,260 Q200,290 220,270"/>
+    <path d="M240,258 Q260,220 250,255 Q240,290 260,265"/>
+    <path d="M280,262 Q300,228 290,260 Q280,292 300,270"/>
+  </g>
+  <!-- 筷子 -->
+  <g stroke="#fff" stroke-width="8" stroke-linecap="round" fill="none">
+    <line x1="290" y1="168" x2="340" y2="310"/>
+    <line x1="310" y1="162" x2="355" y2="300"/>
+  </g>
+  <!-- 蒸氣 -->
+  <g fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" opacity="0.7">
+    <path d="M210,220 Q215,200 210,185 Q205,170 210,155"/>
+    <path d="M256,210 Q261,190 256,175 Q251,160 256,140"/>
+    <path d="M302,218 Q307,198 302,183 Q297,168 302,150"/>
+  </g>
+</svg>

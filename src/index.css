@@ -1,0 +1,438 @@
+/* ===== Google Fonts 由 index.html <link> 載入 ===== */
+@import 'tailwindcss';
+
+/* ===== Tailwind CSS 4 Theme 擴展 ===== */
+@theme {
+  /* 品牌色 - 木色 */
+  --color-primary-50: #fdf8f0;
+  --color-primary-100: #faecd8;
+  --color-primary-200: #f4d5a8;
+  --color-primary-300: #edb96f;
+  --color-primary-400: #e69c3e;
+  --color-primary-500: #d4852a;
+  --color-primary-600: #b86a1f;
+  --color-primary-700: #98501d;
+  --color-primary-800: #7c411f;
+  --color-primary-900: #66371d;
+  --color-primary-950: #3a1b0c;
+
+  /* 強調色 - 朱紅 */
+  --color-accent-50: #fef3f2;
+  --color-accent-100: #fee4e1;
+  --color-accent-200: #fecec8;
+  --color-accent-300: #fcada3;
+  --color-accent-400: #f87c6e;
+  --color-accent-500: #ef5040;
+  --color-accent-600: #d43425;
+  --color-accent-700: #b8271b;
+  --color-accent-800: #98241b;
+  --color-accent-900: #7e241d;
+  --color-accent-950: #440f0a;
+
+  /* 暖灰中性色 */
+  --color-warm-50: #faf9f7;
+  --color-warm-100: #f5f3ef;
+  --color-warm-200: #e8e4dd;
+  --color-warm-300: #d6d0c5;
+  --color-warm-400: #b8b0a2;
+  --color-warm-500: #9c9385;
+  --color-warm-600: #857b6e;
+  --color-warm-700: #6e655a;
+  --color-warm-800: #5c544b;
+  --color-warm-900: #4e4741;
+  --color-warm-950: #292522;
+
+  /* 字型 */
+  --font-heading: 'Shippori Mincho', 'Noto Serif TC', Georgia, serif;
+  --font-body: 'Noto Sans TC', 'Microsoft JhengHei', 'PingFang TC', sans-serif;
+  --font-decorative: 'Yuji Syuku', 'Shippori Mincho', 'Noto Serif TC', serif;
+  --font-mono: 'JetBrains Mono', Consolas, 'Courier New', monospace;
+
+  /* 動畫 */
+  --animate-steam: steam-rise 3s ease-in-out infinite;
+  --animate-wave: wave-flow 8s linear infinite;
+  --animate-fade-in: fade-in 0.5s ease-out forwards;
+  --animate-fade-in-up: fade-in-up 0.6s ease-out forwards;
+  --animate-slide-up: slide-up 0.4s ease-out forwards;
+  --animate-pulse-soft: pulse-soft 2s ease-in-out infinite;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-shimmer: shimmer 2s linear infinite;
+  --animate-bounce-in: bounce-in 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+}
+
+/* ===== shadcn/ui 語義色彩層 ===== */
+:root {
+  --background: 35 33% 97%;
+  --background-secondary: 35 18% 94%;
+  --background-tertiary: 33 16% 90%;
+  --foreground: 20 8% 15%;
+
+  --card: 0 0% 100%;
+  --card-foreground: 20 8% 15%;
+
+  --popover: 0 0% 100%;
+  --popover-foreground: 20 8% 15%;
+
+  --primary: 33 70% 50%;
+  --primary-foreground: 35 60% 97%;
+
+  --accent-primary: 4 70% 49%;
+  --accent-primary-foreground: 4 90% 97%;
+
+  --secondary: 35 18% 94%;
+  --secondary-foreground: 33 10% 39%;
+
+  --muted: 35 18% 94%;
+  --muted-foreground: 33 10% 39%;
+
+  --accent: 35 18% 94%;
+  --accent-foreground: 20 8% 15%;
+
+  --destructive: 0 73% 51%;
+  --destructive-foreground: 0 0% 100%;
+
+  --border: 37 18% 89%;
+  --input: 37 18% 89%;
+  --ring: 33 70% 50%;
+
+  --radius: 0.75rem;
+
+  --success: 142 63% 37%;
+  --success-foreground: 0 0% 100%;
+  --warning: 38 92% 50%;
+  --warning-foreground: 30 80% 15%;
+  --info: 221 83% 53%;
+  --info-foreground: 0 0% 100%;
+}
+
+/* ===== 深色模式（廚房/叫號看板用 class 切換） ===== */
+.dark {
+  --background: 25 12% 9%;
+  --background-secondary: 28 14% 12%;
+  --background-tertiary: 28 13% 16%;
+  --foreground: 35 18% 94%;
+
+  --card: 28 13% 16%;
+  --card-foreground: 35 18% 94%;
+
+  --popover: 28 13% 16%;
+  --popover-foreground: 35 18% 94%;
+
+  --primary: 33 70% 50%;
+  --primary-foreground: 35 60% 97%;
+
+  --secondary: 28 14% 12%;
+  --secondary-foreground: 37 12% 72%;
+
+  --muted: 28 14% 12%;
+  --muted-foreground: 33 8% 53%;
+
+  --accent: 28 14% 12%;
+  --accent-foreground: 35 18% 94%;
+
+  --destructive: 0 73% 51%;
+  --destructive-foreground: 0 0% 100%;
+
+  --border: 30 12% 20%;
+  --input: 30 12% 20%;
+  --ring: 33 70% 50%;
+}
+
+/* ===== 全域基底樣式 ===== */
+* {
+  border-color: hsl(var(--border));
+}
+
+body {
+  margin: 0;
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overscroll-behavior: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ===== 工具類別 ===== */
+.no-select {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.scroll-smooth {
+  scroll-behavior: smooth;
+}
+
+.touch-target {
+  min-height: 48px;
+  min-width: 48px;
+}
+
+/* ===== 日式圖案 ===== */
+
+/* 青海波背景圖案 */
+.seigaiha {
+  --seigaiha-color: var(--color-primary-200, #f4d5a8);
+  --seigaiha-bg: transparent;
+  background-color: var(--seigaiha-bg);
+  background-image:
+    radial-gradient(circle at 100% 150%, var(--seigaiha-color) 24%, var(--seigaiha-bg) 24%,
+      var(--seigaiha-bg) 28%, var(--seigaiha-color) 28%, var(--seigaiha-color) 36%,
+      var(--seigaiha-bg) 36%, var(--seigaiha-bg) 40%, var(--seigaiha-color) 40%,
+      var(--seigaiha-color) 48%, transparent 48%),
+    radial-gradient(circle at 0% 150%, var(--seigaiha-color) 24%, var(--seigaiha-bg) 24%,
+      var(--seigaiha-bg) 28%, var(--seigaiha-color) 28%, var(--seigaiha-color) 36%,
+      var(--seigaiha-bg) 36%, var(--seigaiha-bg) 40%, var(--seigaiha-color) 40%,
+      var(--seigaiha-color) 48%, transparent 48%);
+  background-size: 56px 28px;
+}
+
+/* 淡色版本 - 用於頁面背景 */
+.seigaiha-subtle {
+  --seigaiha-color: var(--color-primary-100, #faecd8);
+  --seigaiha-bg: var(--color-warm-50, #faf9f7);
+  opacity: 0.4;
+}
+
+/* 深色版本 - 用於叫號看板 */
+.seigaiha-dark {
+  --seigaiha-color: rgba(212, 133, 42, 0.08);
+  --seigaiha-bg: transparent;
+}
+
+/* 波浪紋流動動畫 */
+.seigaiha-animated {
+  animation: wave-flow 8s linear infinite;
+  background-size: 56px 28px;
+}
+
+/* 雲紋分隔線 */
+.cloud-divider-simple {
+  height: 16px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 16'%3E%3Cpath d='M0 16 Q25 0 50 8 Q75 16 100 8 Q125 0 150 8 Q175 16 200 8 L200 16 Z' fill='%23faecd8' opacity='0.6'/%3E%3C/svg%3E") repeat-x;
+  background-size: 200px 16px;
+}
+
+.dark .cloud-divider-simple {
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 16'%3E%3Cpath d='M0 16 Q25 0 50 8 Q75 16 100 8 Q125 0 150 8 Q175 16 200 8 L200 16 Z' fill='%232e2a22' opacity='0.6'/%3E%3C/svg%3E") repeat-x;
+  background-size: 200px 16px;
+}
+
+/* 蒸氣動畫 */
+.steam-animation {
+  color: var(--color-primary-300, #edb96f);
+}
+
+.steam-line {
+  stroke-dasharray: 80;
+  stroke-dashoffset: 80;
+  animation: steam-rise 3s ease-in-out infinite;
+}
+
+.steam-1 { animation-delay: 0s; }
+.steam-2 { animation-delay: 0.8s; }
+.steam-3 { animation-delay: 1.6s; }
+
+.steam-animation-sm { width: 24px; height: 32px; }
+.steam-animation-sm .steam-line { stroke-width: 1.5; animation-duration: 2.5s; }
+
+.steam-animation-lg { width: 80px; height: 100px; }
+
+/* 菜單卡片互動效果 */
+.menu-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.menu-card:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 4px 6px -1px rgba(41, 37, 34, 0.08),
+    0 2px 4px -2px rgba(41, 37, 34, 0.05);
+}
+
+.menu-card:active {
+  transform: scale(0.98);
+  box-shadow:
+    0 1px 2px 0 rgba(41, 37, 34, 0.05);
+}
+
+/* 訂單完成放射光芒 */
+.order-success-glow {
+  position: relative;
+}
+
+.order-success-glow::after {
+  content: '';
+  position: absolute;
+  inset: -20px;
+  background:
+    radial-gradient(circle, rgba(212, 133, 42, 0.15) 0%, transparent 70%);
+  animation: celebrate 1.5s ease-out forwards;
+  pointer-events: none;
+  border-radius: 50%;
+}
+
+/* PWA 安全區域 */
+.safe-area-top {
+  padding-top: env(safe-area-inset-top);
+}
+
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.floating-bar {
+  padding-bottom: max(12px, env(safe-area-inset-bottom));
+}
+
+/* ===== 動畫 @keyframes ===== */
+
+@keyframes steam-rise {
+  0% {
+    stroke-dashoffset: 80;
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  30% {
+    opacity: 0.7;
+  }
+  60% {
+    opacity: 0.4;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+}
+
+@keyframes wave-flow {
+  0% { background-position: 0 0; }
+  100% { background-position: 56px 0; }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-up {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+@keyframes pulse-soft {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.02);
+    opacity: 0.9;
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes bounce-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes celebrate {
+  0% {
+    background-size: 0% 0%;
+    opacity: 0;
+  }
+  50% {
+    background-size: 100% 100%;
+    opacity: 1;
+  }
+  100% {
+    background-size: 120% 120%;
+    opacity: 0;
+  }
+}
+
+@keyframes order-flash {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(212, 133, 42, 0);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(212, 133, 42, 0.3);
+  }
+}
+
+@keyframes number-enter {
+  0% {
+    opacity: 0;
+    transform: scale(0.5) rotateX(45deg);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.1) rotateX(-5deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotateX(0);
+  }
+}
+
+@keyframes stamp {
+  0% {
+    opacity: 0;
+    transform: scale(2) rotate(-15deg);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(0.95) rotate(0deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+@keyframes particle-fall {
+  0% {
+    opacity: 1;
+    transform: translateY(0) rotate(0deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(200px) rotate(180deg);
+  }
+}

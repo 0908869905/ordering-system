@@ -1,0 +1,242 @@
+{
+  "$schema": "Custom Design System Color Palette",
+  "$description": "宏麵屋 (Hiromen-ya) - Japanese Modern Ramen Restaurant Color System",
+
+  "primary": {
+    "$description": "溫暖木色 - 主要品牌色，來自日式木質餐具和檜木吧台的靈感",
+    "50":  "#fdf8f0",
+    "100": "#faecd8",
+    "200": "#f4d5a8",
+    "300": "#edb96f",
+    "400": "#e69c3e",
+    "500": "#d4852a",
+    "600": "#b86a1f",
+    "700": "#98501d",
+    "800": "#7c411f",
+    "900": "#66371d",
+    "950": "#3a1b0c",
+    "DEFAULT": "#d4852a",
+    "foreground": "#fdf8f0"
+  },
+
+  "accent": {
+    "$description": "朱紅色 - 日式傳統紅，來自鳥居、漆器、印章的靈感。用於重要按鈕和強調元素",
+    "50":  "#fef3f2",
+    "100": "#fee4e1",
+    "200": "#fecec8",
+    "300": "#fcada3",
+    "400": "#f87c6e",
+    "500": "#ef5040",
+    "600": "#d43425",
+    "700": "#b8271b",
+    "800": "#98241b",
+    "900": "#7e241d",
+    "950": "#440f0a",
+    "DEFAULT": "#d43425",
+    "foreground": "#fef3f2"
+  },
+
+  "neutral": {
+    "$description": "暖灰 - 基於 stone 色系微調，帶有和紙的溫暖底色",
+    "50":  "#faf9f7",
+    "100": "#f5f3ef",
+    "200": "#e8e4dd",
+    "300": "#d6d0c5",
+    "400": "#b8b0a2",
+    "500": "#9c9385",
+    "600": "#857b6e",
+    "700": "#6e655a",
+    "800": "#5c544b",
+    "900": "#4e4741",
+    "950": "#292522"
+  },
+
+  "background": {
+    "$description": "和紙色 - 微妙的暖白色，模擬日式和紙的質感",
+    "DEFAULT": "#faf8f5",
+    "secondary": "#f5f1eb",
+    "tertiary": "#ede8e0",
+    "inverse": "#292522"
+  },
+
+  "surface": {
+    "$description": "表面色 - 卡片、浮動元素等不同層次的背景",
+    "card": "#ffffff",
+    "card-hover": "#fdfcfa",
+    "elevated": "#ffffff",
+    "overlay": "rgba(41, 37, 34, 0.6)",
+    "popover": "#ffffff",
+    "muted": "#f5f1eb"
+  },
+
+  "border": {
+    "$description": "邊框色 - 不同強度的分隔線色彩",
+    "DEFAULT": "#e8e4dd",
+    "subtle": "#f0ece5",
+    "strong": "#d6d0c5",
+    "accent": "#d4852a"
+  },
+
+  "text": {
+    "$description": "文字色 - 不同重要性的文字色彩",
+    "primary": "#292522",
+    "secondary": "#6e655a",
+    "tertiary": "#9c9385",
+    "inverse": "#faf8f5",
+    "accent": "#d4852a",
+    "link": "#b8271b"
+  },
+
+  "semantic": {
+    "success": {
+      "$description": "松綠 - 完成/成功狀態，靈感來自抹茶和松樹",
+      "50":  "#f0fdf5",
+      "100": "#dcfce8",
+      "200": "#bbf7d1",
+      "300": "#86efad",
+      "400": "#4ade7f",
+      "500": "#22c55e",
+      "600": "#16a34a",
+      "700": "#15803d",
+      "800": "#166534",
+      "900": "#14532d",
+      "DEFAULT": "#16a34a",
+      "foreground": "#f0fdf5"
+    },
+    "warning": {
+      "$description": "琥珀 - 警告/製作中狀態，靈感來自味噌湯的金黃色",
+      "50":  "#fffbeb",
+      "100": "#fef3c7",
+      "200": "#fde68a",
+      "300": "#fcd34d",
+      "400": "#fbbf24",
+      "500": "#f59e0b",
+      "600": "#d97706",
+      "700": "#b45309",
+      "800": "#92400e",
+      "900": "#78350f",
+      "DEFAULT": "#f59e0b",
+      "foreground": "#78350f"
+    },
+    "error": {
+      "$description": "赤紅 - 錯誤/待付款狀態，比 accent 更偏正紅",
+      "50":  "#fef2f2",
+      "100": "#fee2e2",
+      "200": "#fecaca",
+      "300": "#fca5a5",
+      "400": "#f87171",
+      "500": "#ef4444",
+      "600": "#dc2626",
+      "700": "#b91c1c",
+      "800": "#991b1b",
+      "900": "#7f1d1d",
+      "DEFAULT": "#dc2626",
+      "foreground": "#fef2f2"
+    },
+    "info": {
+      "$description": "藍 - 資訊/連線狀態，靈感來自日式藍染（藍染）",
+      "50":  "#eff6ff",
+      "100": "#dbeafe",
+      "200": "#bfdbfe",
+      "300": "#93bbfd",
+      "400": "#60a5fa",
+      "500": "#3b82f6",
+      "600": "#2563eb",
+      "700": "#1d4ed8",
+      "800": "#1e40af",
+      "900": "#1e3a8a",
+      "DEFAULT": "#2563eb",
+      "foreground": "#eff6ff"
+    }
+  },
+
+  "orderStatus": {
+    "$description": "訂單狀態專用色彩 - 保持色彩編碼一致性",
+    "unpaid": {
+      "bg": "#fef2f2",
+      "border": "#fca5a5",
+      "text": "#b91c1c",
+      "badge-bg": "#dc2626",
+      "badge-text": "#ffffff"
+    },
+    "paid": {
+      "bg": "#eff6ff",
+      "border": "#93bbfd",
+      "text": "#1d4ed8",
+      "badge-bg": "#2563eb",
+      "badge-text": "#ffffff"
+    },
+    "preparing": {
+      "bg": "#fffbeb",
+      "border": "#fcd34d",
+      "text": "#b45309",
+      "badge-bg": "#f59e0b",
+      "badge-text": "#78350f"
+    },
+    "completed": {
+      "bg": "#f0fdf5",
+      "border": "#86efad",
+      "text": "#15803d",
+      "badge-bg": "#16a34a",
+      "badge-text": "#ffffff"
+    },
+    "pickedUp": {
+      "bg": "#f5f3ef",
+      "border": "#d6d0c5",
+      "text": "#6e655a",
+      "badge-bg": "#6e655a",
+      "badge-text": "#ffffff"
+    },
+    "cancelled": {
+      "bg": "#f5f3ef",
+      "border": "#b8b0a2",
+      "text": "#857b6e",
+      "badge-bg": "#9c9385",
+      "badge-text": "#ffffff"
+    }
+  },
+
+  "dark": {
+    "$description": "深色模式 - 用於廚房管理和叫號看板，靈感來自炭火和深夜拉麵屋台",
+    "background": {
+      "DEFAULT": "#1a1714",
+      "secondary": "#242019",
+      "tertiary": "#2e2a22",
+      "card": "#2e2a22"
+    },
+    "surface": {
+      "card": "#2e2a22",
+      "card-hover": "#383228",
+      "elevated": "#383228",
+      "overlay": "rgba(26, 23, 20, 0.8)",
+      "muted": "#242019"
+    },
+    "border": {
+      "DEFAULT": "#3d372e",
+      "subtle": "#332e26",
+      "strong": "#4a433a"
+    },
+    "text": {
+      "primary": "#f5f1eb",
+      "secondary": "#b8b0a2",
+      "tertiary": "#857b6e"
+    },
+    "orderStatus": {
+      "unpaid": {
+        "bg": "rgba(220, 38, 38, 0.15)",
+        "border": "rgba(220, 38, 38, 0.4)",
+        "text": "#fca5a5"
+      },
+      "preparing": {
+        "bg": "rgba(245, 158, 11, 0.15)",
+        "border": "rgba(245, 158, 11, 0.4)",
+        "text": "#fcd34d"
+      },
+      "completed": {
+        "bg": "rgba(22, 163, 74, 0.15)",
+        "border": "rgba(22, 163, 74, 0.4)",
+        "text": "#86efad"
+      }
+    }
+  }
+}

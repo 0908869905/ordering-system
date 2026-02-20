@@ -1,0 +1,159 @@
+import { useState } from 'react'
+import { Package, RotateCcw } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Badge } from '@/components/ui/badge'
+import { Card, CardContent } from '@/components/ui/card'
+import { useMenuStore } from '@/stores/useMenuStore'
+import type { Language } from '@/types'
+import type { Translations } from '@/constants'
+
+interface Props {
+  t: Translations
+  language: Language
+}
+
+export default function InventoryPanel({ t, language }: Props) {
+  const { categories, items, setItemAvailability, setItemStock, resetAllStock } =
+    useMenuStore()
+  const [editingId, setEditingId] = useState<string | null>(null)
+  const [editValue, setEditValue] = useState('')
+
+  const sortedCategories = [...categories].sort((a, b) => a.order - b.order)
+
+  const handleSaveStock = (itemId: string) => {
+    const value = parseInt(editValue)
+    if (!isNaN(value) && value >= -1) {
+      setItemStock(itemId, value)
+    }
+    setEditingId(null)
+  }
+
+  return (
+    <div className="p-4">
+      <div className="mb-4 flex items-center justify-between">
+        <h2 className="flex items-center gap-2 font-heading text-lg font-bold">
+          <Package className="h-5 w-5" />
+          {t.inventory}
+        </h2>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => {
+            if (confirm(t.confirmResetInventory)) {
+              resetAllStock()
+            }
+          }}
+        >
+          <RotateCcw className="!size-4" />
+          {t.resetAll}
+        </Button>
+      </div>
+
+      {sortedCategories.map((cat) => {
+        const catItems = items
+          .filter((i) => i.categoryId === cat.id)
+          .sort((a, b) => a.order - b.order)
+
+        if (catItems.length === 0) return null
+
+        return (
+          <div key={cat.id} className="mb-6">
+            <h3 className="mb-2 font-semibold text-[hsl(var(--muted-foreground))]">
+              {language === 'en' && cat.nameEn ? cat.nameEn : cat.name}
+            </h3>
+            <div className="flex flex-col gap-2">
+              {catItems.map((item) => {
+                const name =
+                  language === 'en' && item.nameEn ? item.nameEn : item.name
+                return (
+                  <Card key={item.id}>
+                    <CardContent className="flex items-center gap-3 p-3">
+                      <div className="flex-1">
+                        <span className="font-medium">{name}</span>
+                        <span className="ml-2 text-sm text-[hsl(var(--muted-foreground))]">
+                          ${item.price}
+                        </span>
+                      </div>
+
+                      {/* Stock Display/Edit */}
+                      {editingId === item.id ? (
+                        <div className="flex items-center gap-2">
+                          <Input
+                            type="number"
+                            value={editValue}
+                            onChange={(e) => setEditValue(e.target.value)}
+                            className="h-9 w-20"
+                            min={-1}
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter') handleSaveStock(item.id)
+                              if (e.key === 'Escape') setEditingId(null)
+                            }}
+                            autoFocus
+                          />
+                          <Button
+                            size="sm"
+                            onClick={() => handleSaveStock(item.id)}
+                          >
+                            {t.save}
+                          </Button>
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-2">
+                          <Badge
+                            variant={
+                              !item.available
+                                ? 'destructive'
+                                : item.stock === -1
+                                  ? 'secondary'
+                                  : item.stock <= 5
+                                    ? 'warning'
+                                    : 'success'
+                            }
+                            className="cursor-pointer"
+                            onClick={() => {
+                              setEditingId(item.id)
+                              setEditValue(item.stock.toString())
+                            }}
+                          >
+                            {item.stock === -1
+                              ? t.unlimited
+                              : `${t.stock}: ${item.stock}`}
+                          </Badge>
+
+                          {item.available ? (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="text-[hsl(var(--destructive))]"
+                              onClick={() =>
+                                setItemAvailability(item.id, false)
+                              }
+                            >
+                              {t.markSoldOut}
+                            </Button>
+                          ) : (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="text-[hsl(var(--success))]"
+                              onClick={() =>
+                                setItemAvailability(item.id, true)
+                              }
+                            >
+                              {t.restoreAvailable}
+                            </Button>
+                          )}
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                )
+              })}
+            </div>
+          </div>
+        )
+      })}
+    </div>
+  )
+}

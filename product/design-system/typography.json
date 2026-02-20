@@ -1,0 +1,190 @@
+{
+  "$schema": "Custom Design System Typography",
+  "$description": "宏麵屋 (Hiromen-ya) - Typography System for Japanese Modern Ramen Restaurant",
+
+  "fonts": {
+    "heading": {
+      "name": "Shippori Mincho",
+      "fallback": "'Noto Serif TC', 'Georgia', serif",
+      "weights": [400, 500, 600, 700, 800],
+      "description": "標題字型 - Shippori Mincho 是一款優雅的明朝體，帶有現代感但保留日式書卷氣。用於頁面標題、分類標題、重要文字。其細膩的筆劃收尾和穩定的結構完美呈現日式現代風格。",
+      "usage": ["頁面主標題", "分類名稱", "重要標語", "叫號數字", "價格顯示"],
+      "googleFontsId": "Shippori+Mincho:wght@400;500;600;700;800",
+      "cssVariable": "--font-heading"
+    },
+    "body": {
+      "name": "Noto Sans TC",
+      "fallback": "'Microsoft JhengHei', 'PingFang TC', sans-serif",
+      "weights": [300, 400, 500, 700],
+      "description": "內文字型 - Noto Sans TC 是 Google 為繁體中文設計的無襯線字型，清晰易讀，在各種尺寸下都有良好的可讀性。作為系統主要文字字型。",
+      "usage": ["所有一般文字", "按鈕文字", "表單輸入", "描述說明", "導航項目"],
+      "googleFontsId": "Noto+Sans+TC:wght@300;400;500;700",
+      "cssVariable": "--font-body"
+    },
+    "decorative": {
+      "name": "Yuji Syuku",
+      "fallback": "'Shippori Mincho', 'Noto Serif TC', serif",
+      "weights": [400],
+      "description": "裝飾/書法字型 - Yuji Syuku 帶有強烈的毛筆書法韻味，筆觸流暢有力。專門用於「宏麵屋」品牌 Logo 標題和特殊裝飾性文字。僅有 400 weight，但其書法質感無需粗體變化。",
+      "usage": ["「宏麵屋」Logo 標題", "特殊裝飾文字", "日文書法引言", "頁面大標題裝飾"],
+      "googleFontsId": "Yuji+Syuku&display=swap",
+      "cssVariable": "--font-decorative"
+    },
+    "mono": {
+      "name": "JetBrains Mono",
+      "fallback": "'Consolas', 'Courier New', monospace",
+      "weights": [400, 500, 700],
+      "description": "等寬字型 - 用於訂單號碼、價格數字、時間戳等需要等寬對齊的數字顯示。",
+      "usage": ["訂單號碼", "價格對齊顯示", "計時器", "設備 ID"],
+      "googleFontsId": "JetBrains+Mono:wght@400;500;700",
+      "cssVariable": "--font-mono"
+    }
+  },
+
+  "googleFontsImportUrl": "https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600;700;800&family=Noto+Sans+TC:wght@300;400;500;700&family=Yuji+Syuku&family=JetBrains+Mono:wght@400;500;700&display=swap",
+
+  "scale": {
+    "$description": "字級階梯 - 基於 1.25 (Major Third) 比例尺，確保觸控介面的可讀性",
+    "xs": {
+      "size": "0.75rem",
+      "lineHeight": "1rem",
+      "letterSpacing": "0.01em",
+      "usage": "最小文字、標籤副文字、時間戳"
+    },
+    "sm": {
+      "size": "0.875rem",
+      "lineHeight": "1.25rem",
+      "letterSpacing": "0.005em",
+      "usage": "次要文字、選項說明、輔助資訊"
+    },
+    "base": {
+      "size": "1rem",
+      "lineHeight": "1.5rem",
+      "letterSpacing": "0",
+      "usage": "基礎內文、按鈕文字、表單輸入"
+    },
+    "lg": {
+      "size": "1.125rem",
+      "lineHeight": "1.75rem",
+      "letterSpacing": "-0.005em",
+      "usage": "大按鈕文字、重要內文、品項名稱"
+    },
+    "xl": {
+      "size": "1.25rem",
+      "lineHeight": "1.75rem",
+      "letterSpacing": "-0.01em",
+      "usage": "小標題、分類名稱、訂單號碼"
+    },
+    "2xl": {
+      "size": "1.5rem",
+      "lineHeight": "2rem",
+      "letterSpacing": "-0.015em",
+      "usage": "區塊標題、頁面副標題"
+    },
+    "3xl": {
+      "size": "1.875rem",
+      "lineHeight": "2.25rem",
+      "letterSpacing": "-0.02em",
+      "usage": "頁面標題"
+    },
+    "4xl": {
+      "size": "2.25rem",
+      "lineHeight": "2.5rem",
+      "letterSpacing": "-0.025em",
+      "usage": "大標題、Landing Page 標題"
+    },
+    "5xl": {
+      "size": "3rem",
+      "lineHeight": "1",
+      "letterSpacing": "-0.03em",
+      "usage": "超大標題、叫號看板號碼"
+    },
+    "6xl": {
+      "size": "3.75rem",
+      "lineHeight": "1",
+      "letterSpacing": "-0.035em",
+      "usage": "叫號看板主號碼、裝飾性大字"
+    },
+    "display": {
+      "size": "clamp(4rem, 15vw, 10rem)",
+      "lineHeight": "1",
+      "letterSpacing": "-0.04em",
+      "usage": "叫號看板當前號碼（響應式超大字）"
+    }
+  },
+
+  "textStyles": {
+    "$description": "預定義的文字樣式組合，可直接對應 Tailwind CSS 類別",
+    "logo": {
+      "font": "decorative",
+      "size": "4xl",
+      "weight": 400,
+      "letterSpacing": "0.05em",
+      "description": "「宏麵屋」品牌 Logo"
+    },
+    "pageTitle": {
+      "font": "heading",
+      "size": "3xl",
+      "weight": 700,
+      "letterSpacing": "-0.02em",
+      "description": "頁面主標題"
+    },
+    "sectionTitle": {
+      "font": "heading",
+      "size": "xl",
+      "weight": 600,
+      "letterSpacing": "-0.01em",
+      "description": "區塊標題（如分類名稱）"
+    },
+    "cardTitle": {
+      "font": "body",
+      "size": "base",
+      "weight": 700,
+      "letterSpacing": "0",
+      "description": "卡片標題（如品項名稱）"
+    },
+    "bodyText": {
+      "font": "body",
+      "size": "base",
+      "weight": 400,
+      "letterSpacing": "0",
+      "description": "一般內文"
+    },
+    "caption": {
+      "font": "body",
+      "size": "sm",
+      "weight": 400,
+      "letterSpacing": "0.005em",
+      "description": "輔助說明文字"
+    },
+    "price": {
+      "font": "heading",
+      "size": "lg",
+      "weight": 700,
+      "letterSpacing": "-0.01em",
+      "description": "價格顯示"
+    },
+    "orderNumber": {
+      "font": "mono",
+      "size": "display",
+      "weight": 700,
+      "letterSpacing": "-0.02em",
+      "description": "叫號看板的號碼"
+    },
+    "buttonText": {
+      "font": "body",
+      "size": "base",
+      "weight": 500,
+      "letterSpacing": "0.01em",
+      "description": "按鈕文字"
+    },
+    "badge": {
+      "font": "body",
+      "size": "xs",
+      "weight": 700,
+      "letterSpacing": "0.02em",
+      "textTransform": "none",
+      "description": "標籤/徽章文字"
+    }
+  }
+}
