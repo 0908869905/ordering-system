@@ -1,11 +1,10 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import type { Language, ViewMode } from '@/types'
+import type { Language } from '@/types'
 import { DEFAULT_PASSWORD_HASH } from '@/constants'
 
 interface SettingsState {
   language: Language
-  currentView: ViewMode
   stallName: string
   passwordHash: string
   isKitchenAuthenticated: boolean
@@ -16,7 +15,6 @@ interface SettingsState {
   hostPeerId: string
 
   setLanguage: (lang: Language) => void
-  setCurrentView: (view: ViewMode) => void
   setStallName: (name: string) => void
   setPasswordHash: (hash: string) => void
   setKitchenAuthenticated: (auth: boolean) => void
@@ -31,7 +29,6 @@ export const useSettingsStore = create<SettingsState>()(
   persist(
     (set) => ({
       language: 'zh',
-      currentView: 'landing',
       stallName: '宏麵屋',
       passwordHash: DEFAULT_PASSWORD_HASH,
       isKitchenAuthenticated: false,
@@ -42,7 +39,6 @@ export const useSettingsStore = create<SettingsState>()(
       hostPeerId: '',
 
       setLanguage: (language) => set({ language }),
-      setCurrentView: (currentView) => set({ currentView }),
       setStallName: (stallName) => set({ stallName }),
       setPasswordHash: (passwordHash) => set({ passwordHash }),
       setKitchenAuthenticated: (isKitchenAuthenticated) => set({ isKitchenAuthenticated }),

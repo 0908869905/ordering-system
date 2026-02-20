@@ -19,7 +19,7 @@ interface Props {
 type KitchenTab = 'orders' | 'inventory' | 'menu' | 'revenue' | 'settings'
 
 export default function KitchenView({ t }: Props) {
-  const { isKitchenAuthenticated, setKitchenAuthenticated, setCurrentView, language } =
+  const { isKitchenAuthenticated, setKitchenAuthenticated, language } =
     useSettingsStore()
   const [activeTab, setActiveTab] = useState<KitchenTab>('orders')
   const peer = usePeerSync()
@@ -54,7 +54,7 @@ export default function KitchenView({ t }: Props) {
           variant="ghost"
           size="icon"
           className="text-warm-400 hover:bg-warm-800/30"
-          onClick={() => setCurrentView('landing')}
+          onClick={() => window.location.href = '/'}
         >
           <ArrowLeft />
         </Button>
@@ -77,7 +77,7 @@ export default function KitchenView({ t }: Props) {
           className="text-warm-400 hover:bg-warm-800/30"
           onClick={() => {
             setKitchenAuthenticated(false)
-            setCurrentView('landing')
+            window.location.href = '/'
           }}
         >
           <LogOut className="!size-4" />

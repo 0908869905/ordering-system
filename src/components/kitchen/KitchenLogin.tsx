@@ -18,7 +18,7 @@ async function hashPassword(password: string): Promise<string> {
 }
 
 export default function KitchenLogin({ t }: Props) {
-  const { passwordHash, setKitchenAuthenticated, setCurrentView } =
+  const { passwordHash, setKitchenAuthenticated } =
     useSettingsStore()
   const [password, setPassword] = useState('')
   const [error, setError] = useState(false)
@@ -38,7 +38,7 @@ export default function KitchenLogin({ t }: Props) {
       <Button
         variant="ghost"
         className="absolute left-4 top-4"
-        onClick={() => setCurrentView('landing')}
+        onClick={() => window.location.href = '/'}
       >
         <ArrowLeft className="!size-5" />
         {t.back}

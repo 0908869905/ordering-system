@@ -1,7 +1,6 @@
 import { useState, useEffect, useMemo, useCallback } from 'react'
 import { ArrowLeft, Maximize, Minimize, Volume2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { useSettingsStore } from '@/stores/useSettingsStore'
 import { useOrderStore } from '@/stores/useOrderStore'
 import { useSound } from '@/hooks/useSound'
 import { useSpeech } from '@/hooks/useSpeech'
@@ -14,7 +13,6 @@ interface Props {
 }
 
 export default function QueueView({ t }: Props) {
-  const { setCurrentView } = useSettingsStore()
   const orders = useOrderStore((s) => s.orders)
   const { playNotification } = useSound()
   const { callNumber } = useSpeech()
@@ -85,7 +83,7 @@ export default function QueueView({ t }: Props) {
         <Button
           variant="ghost"
           className="absolute left-4 top-4 text-warm-400 hover:bg-warm-800/30"
-          onClick={() => setCurrentView('landing')}
+          onClick={() => window.location.href = '/'}
         >
           <ArrowLeft className="!size-5" />
           {t.back}
@@ -111,7 +109,7 @@ export default function QueueView({ t }: Props) {
           variant="ghost"
           size="icon"
           className="text-warm-400 hover:bg-warm-800/30"
-          onClick={() => setCurrentView('landing')}
+          onClick={() => window.location.href = '/'}
         >
           <ArrowLeft />
         </Button>

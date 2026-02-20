@@ -1,8 +1,9 @@
-import { UtensilsCrossed, ChefHat, Monitor, Globe } from 'lucide-react'
+import { Globe } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useSettingsStore } from '@/stores/useSettingsStore'
 import SteamAnimation from '@/components/shared/SteamAnimation'
 import CloudDivider from '@/components/shared/CloudDivider'
+import LanternIcon from '@/components/shared/LanternIcon'
 import type { Translations } from '@/constants'
 
 interface Props {
@@ -10,7 +11,7 @@ interface Props {
 }
 
 export default function LandingPage({ t }: Props) {
-  const { setCurrentView, language, setLanguage } = useSettingsStore()
+  const { language, setLanguage } = useSettingsStore()
 
   return (
     <div className="relative flex min-h-dvh flex-col items-center justify-center gap-8 p-6 no-select overflow-hidden">
@@ -36,34 +37,13 @@ export default function LandingPage({ t }: Props) {
 
       {/* 按鈕區域 */}
       <div className="relative z-10 flex w-full max-w-sm flex-col gap-4 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
-        <Button
-          size="xl"
-          className="w-full text-xl"
-          onClick={() => setCurrentView('customer')}
-        >
-          <UtensilsCrossed className="!size-6" />
-          {t.customerOrder}
+        <Button asChild size="xl" className="w-full text-xl">
+          <a href="/customer.html">
+            <LanternIcon className="!size-8" />
+            {t.customerOrder}
+          </a>
         </Button>
 
-        <Button
-          size="lg"
-          variant="secondary"
-          className="w-full"
-          onClick={() => setCurrentView('kitchen')}
-        >
-          <ChefHat className="!size-5" />
-          {t.kitchenManage}
-        </Button>
-
-        <Button
-          size="lg"
-          variant="secondary"
-          className="w-full"
-          onClick={() => setCurrentView('queue')}
-        >
-          <Monitor className="!size-5" />
-          {t.queueDisplay}
-        </Button>
       </div>
 
       {/* 語言切換 */}

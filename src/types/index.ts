@@ -87,8 +87,6 @@ export interface PeerMessage {
 
 export type Language = 'zh' | 'en'
 
-export type ViewMode = 'landing' | 'customer' | 'kitchen' | 'queue'
-
 // === 營收報表 ===
 
 export interface RevenueStats {

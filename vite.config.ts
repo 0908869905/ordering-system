@@ -5,6 +5,16 @@ import { VitePWA } from 'vite-plugin-pwa'
 import path from 'path'
 
 export default defineConfig({
+  build: {
+    rollupOptions: {
+      input: {
+        main: path.resolve(__dirname, 'index.html'),
+        customer: path.resolve(__dirname, 'customer.html'),
+        kitchen: path.resolve(__dirname, 'kitchen.html'),
+        queue: path.resolve(__dirname, 'queue.html'),
+      },
+    },
+  },
   plugins: [
     react(),
     tailwindcss(),
@@ -39,6 +49,7 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
+        navigateFallback: undefined,
       },
     }),
   ],

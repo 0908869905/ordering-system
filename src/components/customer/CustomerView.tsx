@@ -17,7 +17,7 @@ interface Props {
 }
 
 export default function CustomerView({ t }: Props) {
-  const { setCurrentView, language } = useSettingsStore()
+  const { language } = useSettingsStore()
   const { categories, items } = useMenuStore()
   const cartItems = useCartStore((s) => s.items)
   const getTotal = useCartStore((s) => s.getTotal)
@@ -62,7 +62,7 @@ export default function CustomerView({ t }: Props) {
         onContinue={() => setCompletedOrder(null)}
         onBackToHome={() => {
           setCompletedOrder(null)
-          setCurrentView('landing')
+          window.location.href = '/'
         }}
       />
     )
@@ -77,7 +77,7 @@ export default function CustomerView({ t }: Props) {
         <Button
           variant="ghost"
           size="icon"
-          onClick={() => setCurrentView('landing')}
+          onClick={() => window.location.href = '/'}
         >
           <ArrowLeft />
         </Button>
