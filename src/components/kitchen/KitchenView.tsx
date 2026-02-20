@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { ArrowLeft, ClipboardList, Package, FileEdit, BarChart3, Settings, LogOut } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useSettingsStore } from '@/stores/useSettingsStore'
+import { useMenuStore } from '@/stores/useMenuStore'
 import { usePeerSync } from '@/hooks/usePeerSync'
 import ConnectionStatus from '@/components/shared/ConnectionStatus'
 import KitchenLogin from './KitchenLogin'
@@ -33,6 +34,18 @@ export default function KitchenView({ t }: Props) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isKitchenAuthenticated])
+
+  // Auto-broadcast menu/inventory changes to other tabs and connected peers
+  useEffect(() => {
+    const unsubscribe = useMenuStore.subscribe((state, prevState) => {
+      if (state.categories !== prevState.categories) {
+        peer.broadcastMenuSync()
+      } else if (state.items !== prevState.items) {
+        peer.broadcastInventorySync()
+      }
+    })
+    return unsubscribe
+  }, [peer.broadcastMenuSync, peer.broadcastInventorySync])
 
   if (!isKitchenAuthenticated) {
     return <KitchenLogin t={t} />
