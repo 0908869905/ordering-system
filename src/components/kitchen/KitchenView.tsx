@@ -1,8 +1,9 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useMemo } from 'react'
 import { ArrowLeft, ClipboardList, Package, FileEdit, BarChart3, Settings, LogOut } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useSettingsStore } from '@/stores/useSettingsStore'
 import { useMenuStore } from '@/stores/useMenuStore'
+import { useOrderStore } from '@/stores/useOrderStore'
 import { usePeerSync } from '@/hooks/usePeerSync'
 import ConnectionStatus from '@/components/shared/ConnectionStatus'
 import KitchenLogin from './KitchenLogin'
@@ -61,12 +62,18 @@ export default function KitchenView({ t }: Props) {
     }
   }, [activeTab])
 
+  const orders = useOrderStore((s) => s.orders)
+  const activeOrderCount = useMemo(
+    () => orders.filter((o) => ['created', 'paid', 'preparing'].includes(o.status)).length,
+    [orders]
+  )
+
   if (!isKitchenAuthenticated) {
     return <KitchenLogin t={t} />
   }
 
-  const tabs: { id: KitchenTab; label: string; icon: React.ReactNode }[] = [
-    { id: 'orders', label: t.orders, icon: <ClipboardList className="!size-4" /> },
+  const tabs: { id: KitchenTab; label: string; icon: React.ReactNode; badge?: number }[] = [
+    { id: 'orders', label: t.orders, icon: <ClipboardList className="!size-4" />, badge: activeOrderCount },
     { id: 'inventory', label: t.inventory, icon: <Package className="!size-4" /> },
     { id: 'menu', label: t.menuEditor, icon: <FileEdit className="!size-4" /> },
     { id: 'revenue', label: t.revenue, icon: <BarChart3 className="!size-4" /> },
@@ -127,6 +134,11 @@ export default function KitchenView({ t }: Props) {
           >
             {tab.icon}
             {tab.label}
+            {tab.badge != null && tab.badge > 0 && (
+              <span className="ml-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-accent-600 px-1 text-[10px] font-bold text-white">
+                {tab.badge}
+              </span>
+            )}
           </button>
         ))}
         {/* Sliding Indicator */}

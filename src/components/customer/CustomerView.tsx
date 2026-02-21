@@ -115,6 +115,17 @@ export default function CustomerView({ t }: Props) {
         </Button>
         <h1 className="flex-1 font-heading text-lg font-bold ink-text">{t.menu}</h1>
         <span className="font-decorative text-sm text-primary-500 tracking-wider">宏麵屋</span>
+        {itemCount > 0 && (
+          <button
+            onClick={() => setShowCart(true)}
+            className="relative p-2 text-accent-600 transition-transform active:scale-90"
+          >
+            <ShoppingCart className="h-5 w-5" />
+            <span key={itemCount} className="absolute -top-0.5 -right-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-accent-600 text-[10px] font-bold text-white badge-pop">
+              {itemCount}
+            </span>
+          </button>
+        )}
       </header>
 
       {/* Menu */}
