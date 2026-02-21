@@ -60,7 +60,12 @@ export default function OrderCard({
       <CardContent className="p-3 pt-4">
         {/* Header Row */}
         <div className="mb-2 flex items-center justify-between">
-          <span className="font-mono text-2xl font-black ink-text">#{order.orderNumber}</span>
+          <div className="flex items-baseline gap-2">
+            <span className="font-mono text-2xl font-black ink-text">#{order.orderNumber}</span>
+            <span className="text-[10px] text-warm-600 font-mono">
+              {new Date(order.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+            </span>
+          </div>
           <div className={`flex items-center gap-1 text-xs font-mono ${waitColor} ${waitClass}`}>
             <Clock className="h-3 w-3" />
             {waitMinutes}{t.minutes}
