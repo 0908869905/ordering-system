@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { Plus, Pencil, Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
   Dialog,
   DialogContent,
@@ -146,31 +145,31 @@ export default function MenuEditor({ t, language }: Props) {
   }
 
   return (
-    <div className="p-4">
+    <div className="p-4 animate-fade-in">
       {/* Categories */}
       <div className="mb-4 flex items-center justify-between">
-        <h2 className="font-heading text-lg font-bold">{t.menuEditor}</h2>
+        <h2 className="font-heading text-lg font-bold ink-text">{t.menuEditor}</h2>
         <Button size="sm" onClick={() => openCatDialog()}>
           <Plus className="!size-4" />
           {t.addCategory}
         </Button>
       </div>
 
-      {sortedCategories.map((cat) => {
+      {sortedCategories.map((cat, catIdx) => {
         const catItems = items
           .filter((i) => i.categoryId === cat.id)
           .sort((a, b) => a.order - b.order)
         const catDisplayName = localized(language, cat.name, cat.nameEn)
 
         return (
-          <Card key={cat.id} className="mb-4">
-            <CardHeader className="flex flex-row items-center justify-between py-3">
-              <CardTitle className="text-base">{catDisplayName}</CardTitle>
+          <div key={cat.id} className={`mb-5 ${catIdx % 2 === 0 ? 'organic-radius' : 'organic-radius-alt'} border border-warm-800/30 bg-[#2e2a22] overflow-hidden`}>
+            <div className="flex items-center justify-between px-4 py-3 border-b border-dashed border-warm-700/30">
+              <h3 className="font-heading font-semibold text-primary-400">{catDisplayName}</h3>
               <div className="flex gap-1">
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-8 w-8"
+                  className="h-8 w-8 text-warm-400 hover:text-primary-400"
                   onClick={() => openCatDialog(cat)}
                 >
                   <Pencil className="!size-3.5" />
@@ -178,7 +177,7 @@ export default function MenuEditor({ t, language }: Props) {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-8 w-8 text-[hsl(var(--destructive))]"
+                  className="h-8 w-8 text-warm-400 hover:text-accent-400"
                   onClick={() => {
                     if (confirm(t.confirmDeleteCategory)) {
                       deleteCategory(cat.id)
@@ -188,23 +187,23 @@ export default function MenuEditor({ t, language }: Props) {
                   <Trash2 className="!size-3.5" />
                 </Button>
               </div>
-            </CardHeader>
-            <CardContent className="pt-0">
+            </div>
+            <div className="p-3">
               <div className="flex flex-col gap-2">
                 {catItems.map((item) => {
                   const displayName = localized(language, item.name, item.nameEn)
                   return (
                     <div
                       key={item.id}
-                      className="flex items-center gap-2 rounded-lg border border-[hsl(var(--border))] p-2"
+                      className="flex items-center gap-2 organic-radius border border-warm-700/20 bg-warm-900/30 p-2.5 transition-colors hover:bg-warm-800/30"
                     >
                       <div className="flex-1">
-                        <span className="font-medium">{displayName}</span>
-                        <span className="ml-2 text-sm text-[hsl(var(--primary))]">
+                        <span className="font-heading font-medium">{displayName}</span>
+                        <span className="ml-2 text-sm text-primary-400 font-mono">
                           ${item.price}
                         </span>
                         {item.options.length > 0 && (
-                          <span className="ml-2 text-xs text-[hsl(var(--muted-foreground))]">
+                          <span className="ml-2 text-xs text-warm-500">
                             ({item.options.length} {t.options})
                           </span>
                         )}
@@ -212,7 +211,7 @@ export default function MenuEditor({ t, language }: Props) {
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="h-8 w-8"
+                        className="h-8 w-8 text-warm-400 hover:text-primary-400"
                         onClick={() => openItemDialog(cat.id, item)}
                       >
                         <Pencil className="!size-3.5" />
@@ -220,7 +219,7 @@ export default function MenuEditor({ t, language }: Props) {
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="h-8 w-8 text-[hsl(var(--destructive))]"
+                        className="h-8 w-8 text-warm-400 hover:text-accent-400"
                         onClick={() => {
                           if (confirm(t.confirmDeleteItem)) {
                             deleteItem(item.id)
@@ -236,14 +235,14 @@ export default function MenuEditor({ t, language }: Props) {
               <Button
                 variant="outline"
                 size="sm"
-                className="mt-3 w-full"
+                className="mt-3 w-full border-dashed border-warm-600/30 text-warm-400 hover:text-primary-400 hover:border-primary-500/30"
                 onClick={() => openItemDialog(cat.id)}
               >
                 <Plus className="!size-4" />
                 {t.addItem}
               </Button>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         )
       })}
 
@@ -252,12 +251,12 @@ export default function MenuEditor({ t, language }: Props) {
         open={catDialog.open}
         onOpenChange={(open) => !open && setCatDialog({ open: false })}
       >
-        <DialogContent className="max-w-sm">
+        <DialogContent className="max-w-sm dark bg-[#2e2a22] border-warm-700/30 text-warm-100">
           <DialogHeader>
-            <DialogTitle>
+            <DialogTitle className="text-primary-400">
               {catDialog.editing ? t.editCategory : t.addCategory}
             </DialogTitle>
-            <DialogDescription>{t.categoryName}</DialogDescription>
+            <DialogDescription className="text-warm-500">{t.categoryName}</DialogDescription>
           </DialogHeader>
           <div className="flex flex-col gap-3">
             <Input
@@ -281,12 +280,12 @@ export default function MenuEditor({ t, language }: Props) {
         open={itemDialog.open}
         onOpenChange={(open) => !open && setItemDialog({ open: false })}
       >
-        <DialogContent className="max-w-md">
+        <DialogContent className="max-w-md dark bg-[#2e2a22] border-warm-700/30 text-warm-100">
           <DialogHeader>
-            <DialogTitle>
+            <DialogTitle className="text-primary-400">
               {itemDialog.editing ? t.editItem : t.addItem}
             </DialogTitle>
-            <DialogDescription>{t.itemName}</DialogDescription>
+            <DialogDescription className="text-warm-500">{t.itemName}</DialogDescription>
           </DialogHeader>
           <div className="flex max-h-[60vh] flex-col gap-3 overflow-y-auto">
             <Input
@@ -308,7 +307,7 @@ export default function MenuEditor({ t, language }: Props) {
               min={0}
             />
             <select
-              className="flex h-12 w-full rounded-lg border border-[hsl(var(--input))] bg-[hsl(var(--background))] px-3 py-2"
+              className="flex h-12 w-full organic-radius border border-warm-700/30 bg-warm-900/50 px-3 py-2 font-heading text-warm-200"
               value={itemCategoryId}
               onChange={(e) => setItemCategoryId(e.target.value)}
             >
@@ -325,20 +324,20 @@ export default function MenuEditor({ t, language }: Props) {
             />
 
             {/* Options */}
-            <div className="border-t border-[hsl(var(--border))] pt-3">
-              <h4 className="mb-2 font-medium">{t.options}</h4>
+            <div className="border-t border-dashed border-warm-700/30 pt-3">
+              <h4 className="mb-2 font-heading font-medium text-warm-300">{t.options}</h4>
               {itemOptions.map((opt) => (
                 <div
                   key={opt.id}
                   className="mb-2 flex items-center gap-2 text-sm"
                 >
-                  <span className="flex-1">
-                    {opt.name} (+${opt.price})
+                  <span className="flex-1 font-heading text-warm-200">
+                    {opt.name} <span className="text-primary-400 font-mono">(+${opt.price})</span>
                   </span>
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-7 w-7 text-[hsl(var(--destructive))]"
+                    className="h-7 w-7 text-warm-400 hover:text-accent-400"
                     onClick={() => removeOption(opt.id)}
                   >
                     <Trash2 className="!size-3" />

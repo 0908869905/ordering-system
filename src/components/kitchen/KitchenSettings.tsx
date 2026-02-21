@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { Volume2, VolumeX, RotateCcw, Key, Store } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { useSettingsStore } from '@/stores/useSettingsStore'
 import { useOrderStore } from '@/stores/useOrderStore'
 import { hashPassword, generateSalt, MIN_PASSWORD_LENGTH } from '@/lib/crypto'
@@ -16,10 +15,10 @@ function ToggleSwitch({ checked, onChange }: { checked: boolean; onChange: () =>
   return (
     <button
       onClick={onChange}
-      className={`relative h-6 w-11 rounded-full transition-colors ${checked ? 'bg-primary-500' : 'bg-warm-300'}`}
+      className={`toggle-switch relative h-7 w-12 transition-colors ${checked ? 'bg-primary-600' : 'bg-warm-700'}`}
     >
       <span
-        className={`absolute left-0.5 top-0.5 h-5 w-5 rounded-full bg-white transition-transform ${checked ? 'translate-x-5' : ''}`}
+        className={`absolute left-0.5 top-0.5 h-6 w-6 transition-transform ${checked ? 'translate-x-5' : ''} toggle-knob`}
       />
     </button>
   )
@@ -74,145 +73,137 @@ export default function KitchenSettings({ t }: Props) {
   }
 
   return (
-    <div className="p-4">
+    <div className="p-4 animate-fade-in">
       {/* Stall Name */}
-      <Card className="mb-4">
-        <CardHeader className="pb-2">
-          <CardTitle className="flex items-center gap-2 font-heading text-base">
-            <Store className="h-4 w-4" />
-            {t.stallName}
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="flex gap-2">
-            <Input
-              value={editStallName}
-              onChange={(e) => setEditStallName(e.target.value)}
-              className="h-9"
-            />
-            <Button size="sm" onClick={handleSaveStallName}>
-              {t.save}
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
+      <div className="mb-5 organic-radius border border-warm-800/30 bg-[#2e2a22] p-4">
+        <h3 className="flex items-center gap-2 font-heading text-base font-semibold mb-3 text-warm-200">
+          <Store className="h-4 w-4 text-primary-400" />
+          {t.stallName}
+        </h3>
+        <div className="flex gap-2">
+          <Input
+            value={editStallName}
+            onChange={(e) => setEditStallName(e.target.value)}
+            className="h-9"
+          />
+          <Button size="sm" onClick={handleSaveStallName}>
+            {t.save}
+          </Button>
+        </div>
+      </div>
+
+      <div className="brush-divider mx-auto w-24 mb-5" style={{ opacity: 0.25 }} />
 
       {/* Sound Settings */}
-      <Card className="mb-4">
-        <CardHeader className="pb-2">
-          <CardTitle className="flex items-center gap-2 font-heading text-base">
-            {soundEnabled ? (
-              <Volume2 className="h-4 w-4" />
-            ) : (
-              <VolumeX className="h-4 w-4" />
-            )}
-            {t.soundEnabled}
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="flex flex-col gap-3">
-            <div className="flex items-center justify-between">
-              <span className="text-sm">{t.soundEnabled}</span>
-              <ToggleSwitch checked={soundEnabled} onChange={() => setSoundEnabled(!soundEnabled)} />
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-sm">{t.speechEnabled}</span>
-              <ToggleSwitch checked={speechEnabled} onChange={() => setSpeechEnabled(!speechEnabled)} />
-            </div>
-            <div className="flex items-center gap-3">
-              <span className="text-sm">{t.volume}</span>
-              <input
-                type="range"
-                min={0}
-                max={100}
-                value={volume}
-                onChange={(e) => setVolume(parseInt(e.target.value))}
-                className="flex-1"
-              />
-              <span className="w-8 text-right text-sm">{volume}%</span>
-            </div>
+      <div className="mb-5 organic-radius-alt border border-warm-800/30 bg-[#2e2a22] p-4">
+        <h3 className="flex items-center gap-2 font-heading text-base font-semibold mb-3 text-warm-200">
+          {soundEnabled ? (
+            <Volume2 className="h-4 w-4 text-primary-400" />
+          ) : (
+            <VolumeX className="h-4 w-4 text-warm-500" />
+          )}
+          {t.soundEnabled}
+        </h3>
+        <div className="flex flex-col gap-3">
+          <div className="flex items-center justify-between">
+            <span className="text-sm font-heading text-warm-300">{t.soundEnabled}</span>
+            <ToggleSwitch checked={soundEnabled} onChange={() => setSoundEnabled(!soundEnabled)} />
           </div>
-        </CardContent>
-      </Card>
+          <div className="flex items-center justify-between">
+            <span className="text-sm font-heading text-warm-300">{t.speechEnabled}</span>
+            <ToggleSwitch checked={speechEnabled} onChange={() => setSpeechEnabled(!speechEnabled)} />
+          </div>
+          <div className="flex items-center gap-3">
+            <span className="text-sm font-heading text-warm-300 shrink-0">{t.volume}</span>
+            <input
+              type="range"
+              min={0}
+              max={100}
+              value={volume}
+              onChange={(e) => setVolume(parseInt(e.target.value))}
+              className="volume-slider flex-1"
+            />
+            <span className="w-10 text-right text-sm font-mono text-warm-400">{volume}%</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="brush-divider mx-auto w-24 mb-5" style={{ opacity: 0.25 }} />
 
       {/* Password */}
-      <Card className="mb-4">
-        <CardHeader className="pb-2">
-          <CardTitle className="flex items-center gap-2 font-heading text-base">
-            <Key className="h-4 w-4" />
-            {t.setPassword}
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="flex flex-col gap-2">
-            <Input
-              type="password"
-              placeholder={t.newPassword}
-              value={newPassword}
-              onChange={(e) => {
-                setNewPassword(e.target.value)
-                setPwdError('')
-                setPwdSuccess(false)
-              }}
-              className="h-9"
-            />
-            <Input
-              type="password"
-              placeholder={t.confirmPassword}
-              value={confirmPwd}
-              onChange={(e) => {
-                setConfirmPwd(e.target.value)
-                setPwdError('')
-                setPwdSuccess(false)
-              }}
-              className="h-9"
-            />
-            {pwdError && (
-              <p className="text-xs text-[hsl(var(--destructive))]">{pwdError}</p>
-            )}
-            {pwdSuccess && (
-              <p className="text-xs text-[hsl(var(--success))]">
-                {t.passwordUpdated}
-              </p>
-            )}
-            <Button size="sm" onClick={handleChangePassword}>
-              {t.save}
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
+      <div className="mb-5 organic-radius border border-warm-800/30 bg-[#2e2a22] p-4">
+        <h3 className="flex items-center gap-2 font-heading text-base font-semibold mb-3 text-warm-200">
+          <Key className="h-4 w-4 text-primary-400" />
+          {t.setPassword}
+        </h3>
+        <div className="flex flex-col gap-2">
+          <Input
+            type="password"
+            placeholder={t.newPassword}
+            value={newPassword}
+            onChange={(e) => {
+              setNewPassword(e.target.value)
+              setPwdError('')
+              setPwdSuccess(false)
+            }}
+            className="h-9"
+          />
+          <Input
+            type="password"
+            placeholder={t.confirmPassword}
+            value={confirmPwd}
+            onChange={(e) => {
+              setConfirmPwd(e.target.value)
+              setPwdError('')
+              setPwdSuccess(false)
+            }}
+            className="h-9"
+          />
+          {pwdError && (
+            <p className="text-xs text-accent-500 animate-fade-in">{pwdError}</p>
+          )}
+          {pwdSuccess && (
+            <p className="text-xs text-emerald-400 animate-fade-in">
+              {t.passwordUpdated}
+            </p>
+          )}
+          <Button size="sm" onClick={handleChangePassword}>
+            {t.save}
+          </Button>
+        </div>
+      </div>
+
+      <div className="brush-divider mx-auto w-24 mb-5" style={{ opacity: 0.25 }} />
 
       {/* Reset Data */}
-      <Card>
-        <CardHeader className="pb-2">
-          <CardTitle className="flex items-center gap-2 font-heading text-base">
-            <RotateCcw className="h-4 w-4" />
-            {t.resetData}
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="flex flex-col gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => {
-                if (confirm(t.confirmResetOrders)) resetOrders()
-              }}
-            >
-              {t.resetOrders}
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => {
-                if (confirm(t.confirmResetCounter)) resetCounter()
-              }}
-            >
-              {t.resetCounter}
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
+      <div className="organic-radius-alt border border-warm-800/30 bg-[#2e2a22] p-4">
+        <h3 className="flex items-center gap-2 font-heading text-base font-semibold mb-3 text-accent-400">
+          <RotateCcw className="h-4 w-4" />
+          {t.resetData}
+        </h3>
+        <div className="flex flex-col gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            className="border-warm-600/30 text-warm-300 hover:text-accent-400 hover:border-accent-500/30"
+            onClick={() => {
+              if (confirm(t.confirmResetOrders)) resetOrders()
+            }}
+          >
+            {t.resetOrders}
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            className="border-warm-600/30 text-warm-300 hover:text-accent-400 hover:border-accent-500/30"
+            onClick={() => {
+              if (confirm(t.confirmResetCounter)) resetCounter()
+            }}
+          >
+            {t.resetCounter}
+          </Button>
+        </div>
+      </div>
     </div>
   )
 }
