@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { X, Minus, Plus, Trash2 } from 'lucide-react'
+import { X, Minus, Plus, Trash2, UtensilsCrossed } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useCartStore } from '@/stores/useCartStore'
 import { localized } from '@/lib/utils'
@@ -24,22 +24,24 @@ export default function Cart({ t, language, onClose, onSubmit }: Props) {
 
   if (items.length === 0) {
     return (
-      <div className="fixed inset-0 z-50 flex flex-col bg-[#fdfcf8] animate-fade-in">
+      <div className="fixed inset-0 z-50 flex flex-col bg-[#fdfcf8] cart-slide-in">
         <div className="flex items-center justify-between border-b border-primary-200/40 p-4">
           <h2 className="font-heading text-lg font-bold ink-text">{t.cart}</h2>
           <Button variant="ghost" size="icon" onClick={onClose}>
             <X />
           </Button>
         </div>
-        <div className="flex flex-1 items-center justify-center text-warm-500 font-heading">
-          {t.cartEmpty}
+        <div className="flex flex-1 flex-col items-center justify-center gap-3">
+          <UtensilsCrossed className="h-12 w-12 text-warm-300" />
+          <p className="text-warm-500 font-heading">{t.cartEmpty}</p>
+          <div className="brush-divider w-16" style={{ opacity: 0.3 }} />
         </div>
       </div>
     )
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col bg-[#fdfcf8] animate-fade-in">
+    <div className="fixed inset-0 z-50 flex flex-col bg-[#fdfcf8] cart-slide-in">
       {/* Header */}
       <div className="flex items-center justify-between border-b border-primary-200/40 p-4">
         <h2 className="font-heading text-lg font-bold ink-text">{t.cart}</h2>

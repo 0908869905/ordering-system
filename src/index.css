@@ -336,6 +336,22 @@ body {
   animation: toast-slide-down 0.3s ease-in forwards;
 }
 
+/* 購物車滑入 */
+.cart-slide-in {
+  animation: cart-enter 0.35s cubic-bezier(0.32, 0.72, 0, 1) forwards;
+}
+
+/* 訂單狀態左邊框色 */
+.order-border-unpaid {
+  border-left-color: var(--color-accent-500, #ef5040);
+}
+.order-border-preparing {
+  border-left-color: #f59e0b;
+}
+.order-border-completed {
+  border-left-color: #10b981;
+}
+
 /* 木札標籤 */
 .wood-tag {
   background: linear-gradient(180deg, var(--color-primary-300) 0%, var(--color-primary-400) 100%);
@@ -718,6 +734,17 @@ body {
   to {
     opacity: 0;
     transform: translateY(100%) scale(0.95);
+  }
+}
+
+@keyframes cart-enter {
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 

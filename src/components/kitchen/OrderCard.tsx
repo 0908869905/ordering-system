@@ -50,8 +50,13 @@ export default function OrderCard({
     urgencyBg = 'bg-amber-500/5'
   }
 
+  const borderClass =
+    order.status === 'created' ? 'order-border-unpaid'
+    : order.status === 'completed' ? 'order-border-completed'
+    : 'order-border-preparing'
+
   return (
-    <div className={`receipt-edge pin-decoration overflow-hidden bg-[#2e2a22] border-l-[3px] border-l-current organic-radius ${urgencyBg}`}>
+    <div className={`receipt-edge pin-decoration overflow-hidden bg-[#2e2a22] border-l-[3px] organic-radius ${borderClass} ${urgencyBg}`}>
       <CardContent className="p-3 pt-4">
         {/* Header Row */}
         <div className="mb-2 flex items-center justify-between">
