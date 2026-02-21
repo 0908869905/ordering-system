@@ -706,3 +706,36 @@ body {
     opacity: 1;
   }
 }
+
+@keyframes stagger-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes badge-pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.25); }
+  100% { transform: scale(1); }
+}
+
+/* 菜單卡片交錯入場 */
+.stagger-item {
+  animation: stagger-in 0.4s ease-out both;
+}
+
+/* 徽章彈跳 */
+.badge-pop {
+  animation: badge-pop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* 等待時間閃爍（緊急） */
+.wait-urgent {
+  animation: pulse-soft 1.5s ease-in-out infinite;
+  color: var(--color-accent-500);
+}

@@ -109,9 +109,12 @@ export default function QueueView({ t }: Props) {
   }
 
   return (
-    <div className="flex min-h-dvh flex-col bg-[#1a1714] text-[#f5f1eb] no-select">
+    <div className="relative flex min-h-dvh flex-col bg-[#1a1714] text-[#f5f1eb] no-select overflow-hidden">
+      {/* 青海波背景覆蓋 */}
+      <div className="seigaiha seigaiha-dark seigaiha-animated absolute inset-0 pointer-events-none" />
+
       {/* Header */}
-      <header className="flex items-center justify-between px-4 py-2 border-b border-warm-800/20">
+      <header className="relative z-10 flex items-center justify-between px-4 py-2 border-b border-warm-800/20">
         <Button
           variant="ghost"
           size="icon"
@@ -134,14 +137,14 @@ export default function QueueView({ t }: Props) {
       </header>
 
       {/* 雲紋裝飾帶 */}
-      <div className="dark">
+      <div className="relative z-10 dark">
         <CloudDivider />
       </div>
 
       {/* Main Content */}
-      <div className="flex flex-1 flex-col items-center justify-center gap-8 p-4">
+      <div className="relative z-10 flex flex-1 flex-col items-center justify-center gap-8 p-4">
         {/* Current Number */}
-        <div className="text-center">
+        <div className="text-center animate-fade-in">
           <p className="font-heading text-lg text-primary-400/70">{t.nowServing}</p>
           {currentOrder ? (
             <JapaneseFrame className="mt-4">
@@ -163,16 +166,17 @@ export default function QueueView({ t }: Props) {
 
         {/* Preparing — 燈籠意象 */}
         {preparingOrders.length > 0 && (
-          <div className="w-full max-w-2xl">
+          <div className="w-full max-w-2xl animate-fade-in-up">
             <div className="brush-divider mb-3 mx-auto w-32" style={{ opacity: 0.3 }} />
             <p className="mb-3 text-center font-heading text-sm text-warm-500">
               {t.preparingOrders}
             </p>
             <div className="flex flex-wrap justify-center gap-3">
-              {preparingOrders.map((o) => (
+              {preparingOrders.map((o, idx) => (
                 <div
                   key={o.id}
-                  className="organic-radius bg-amber-500/15 px-6 py-3 font-mono text-2xl font-bold text-amber-400 border border-amber-500/20"
+                  className="stagger-item organic-radius bg-amber-500/15 px-6 py-3 font-mono text-2xl font-bold text-amber-400 border border-amber-500/20"
+                  style={{ animationDelay: `${idx * 0.08}s` }}
                 >
                   #{o.orderNumber}
                 </div>
@@ -183,17 +187,18 @@ export default function QueueView({ t }: Props) {
 
         {/* Recent Completed */}
         {recentCompleted.length > 0 && (
-          <div className="w-full max-w-2xl">
+          <div className="w-full max-w-2xl animate-fade-in-up" style={{ animationDelay: '0.15s' }}>
             <div className="brush-divider mb-3 mx-auto w-32" style={{ opacity: 0.3 }} />
             <p className="mb-3 text-center font-heading text-sm text-warm-500">
               {t.recentCompleted}
             </p>
             <div className="flex flex-wrap justify-center gap-3">
-              {recentCompleted.map((o) => (
+              {recentCompleted.map((o, idx) => (
                 <button
                   key={o.id}
                   onClick={() => handleCallAgain(o.orderNumber)}
-                  className="organic-radius-alt bg-emerald-500/15 px-5 py-2 font-mono text-xl font-bold text-emerald-400 border border-emerald-500/20 transition-transform hover:scale-105 active:scale-95"
+                  className="stagger-item organic-radius-alt bg-emerald-500/15 px-5 py-2 font-mono text-xl font-bold text-emerald-400 border border-emerald-500/20 transition-transform hover:scale-105 active:scale-95"
+                  style={{ animationDelay: `${idx * 0.08}s` }}
                 >
                   #{o.orderNumber}
                 </button>
@@ -203,8 +208,8 @@ export default function QueueView({ t }: Props) {
         )}
       </div>
 
-      {/* 底部青海波裝飾 */}
-      <div className="seigaiha seigaiha-dark seigaiha-animated h-[28px] w-full" />
+      {/* 底部青海波裝飾（加強版） */}
+      <div className="relative z-10 seigaiha seigaiha-dark seigaiha-animated h-[28px] w-full" />
     </div>
   )
 }

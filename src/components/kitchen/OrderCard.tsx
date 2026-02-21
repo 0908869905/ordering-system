@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useState, useEffect } from 'react'
 import { Clock } from 'lucide-react'
 import { CardContent } from '@/components/ui/card'
 import { Button, type ButtonProps } from '@/components/ui/button'
@@ -27,17 +27,26 @@ export default function OrderCard({
   primaryAction,
   secondaryAction,
 }: Props) {
-  const waitMinutes = useMemo(() => {
-    return Math.floor((Date.now() - order.createdAt) / 60000)
+  const [waitMinutes, setWaitMinutes] = useState(() =>
+    Math.floor((Date.now() - order.createdAt) / 60000)
+  )
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setWaitMinutes(Math.floor((Date.now() - order.createdAt) / 60000))
+    }, 30000)
+    return () => clearInterval(interval)
   }, [order.createdAt])
 
-  let waitColor = 'text-[hsl(var(--muted-foreground))]'
+  let waitColor = 'text-warm-500'
   let urgencyBg = ''
+  let waitClass = ''
   if (waitMinutes > 10) {
-    waitColor = 'text-[hsl(var(--destructive))]'
+    waitColor = 'text-accent-500'
     urgencyBg = 'bg-red-500/5'
+    waitClass = 'wait-urgent'
   } else if (waitMinutes > 5) {
-    waitColor = 'text-amber-600'
+    waitColor = 'text-amber-400'
     urgencyBg = 'bg-amber-500/5'
   }
 
@@ -47,9 +56,9 @@ export default function OrderCard({
         {/* Header Row */}
         <div className="mb-2 flex items-center justify-between">
           <span className="font-mono text-2xl font-black ink-text">#{order.orderNumber}</span>
-          <div className={`flex items-center gap-1 text-xs ${waitColor}`}>
+          <div className={`flex items-center gap-1 text-xs font-mono ${waitColor} ${waitClass}`}>
             <Clock className="h-3 w-3" />
-            {waitMinutes} {t.minutes}
+            {waitMinutes}{t.minutes}
           </div>
         </div>
 

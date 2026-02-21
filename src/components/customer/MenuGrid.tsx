@@ -80,14 +80,15 @@ export default function MenuGrid({ t, categories, items, language }: Props) {
                 <div className="brush-divider flex-1" />
               </div>
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
-                {group.items.map((item) => (
-                  <MenuItemCard
-                    key={item.id}
-                    item={item}
-                    language={language}
-                    t={t}
-                    onClick={() => setSelectedItem(item)}
-                  />
+                {group.items.map((item, idx) => (
+                  <div key={item.id} className="stagger-item" style={{ animationDelay: `${idx * 0.06}s` }}>
+                    <MenuItemCard
+                      item={item}
+                      language={language}
+                      t={t}
+                      onClick={() => setSelectedItem(item)}
+                    />
+                  </div>
                 ))}
               </div>
             </div>
@@ -96,14 +97,15 @@ export default function MenuGrid({ t, categories, items, language }: Props) {
       ) : (
         // Show flat grid for selected category
         <div className="grid grid-cols-2 gap-3 p-4 sm:grid-cols-3 md:grid-cols-4">
-          {sortedItems.map((item) => (
-            <MenuItemCard
-              key={item.id}
-              item={item}
-              language={language}
-              t={t}
-              onClick={() => setSelectedItem(item)}
-            />
+          {sortedItems.map((item, idx) => (
+            <div key={item.id} className="stagger-item" style={{ animationDelay: `${idx * 0.05}s` }}>
+              <MenuItemCard
+                item={item}
+                language={language}
+                t={t}
+                onClick={() => setSelectedItem(item)}
+              />
+            </div>
           ))}
         </div>
       )}

@@ -127,7 +127,7 @@ export default function CustomerView({ t }: Props) {
           >
             <ShoppingCart className="!size-5" />
             <span className="font-heading">{t.cart}</span>
-            <Badge variant="secondary" className="ml-1 bg-white/20 text-white border-0">
+            <Badge key={itemCount} variant="secondary" className="ml-1 bg-white/20 text-white border-0 badge-pop">
               {itemCount}
             </Badge>
             <span className="ml-auto font-heading font-bold">${getTotal()}</span>

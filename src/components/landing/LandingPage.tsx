@@ -43,7 +43,14 @@ export default function LandingPage({ t }: Props) {
             {t.customerOrder}
           </a>
         </Button>
+      </div>
 
+      {/* 營業中標示 */}
+      <div className="relative z-10 animate-fade-in" style={{ animationDelay: '0.5s' }}>
+        <div className="flex items-center gap-2 text-warm-500">
+          <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse-soft" />
+          <span className="font-heading text-xs tracking-wider">{language === 'zh' ? '營業中' : 'Now Open'}</span>
+        </div>
       </div>
 
       {/* 語言切換 */}
