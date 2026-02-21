@@ -66,7 +66,13 @@ npm run preview
 - 顧客端用淺色暖調(和紙色 warm-50)、廚房端用深色炭調(#1a1714)
 - 品牌色 accent(朱紅) 用於 CTA 按鈕和價格、primary(木色) 用於裝飾和邊框
 
+## 安全性
+- **CSP Headers**：4 個 HTML 入口皆有 `<meta http-equiv="Content-Security-Policy">`，允許 Google Fonts、PeerJS 信令伺服器、SVG data URI、Service Worker
+- **密碼保護**：SHA-256 加鹽雜湊（src/lib/crypto.ts），向下相容無鹽模式
+- **P2P Payload 驗證**：usePeerSync.ts 含 5 個型別驗證函式，防止惡意/畸形資料
+
 ## 注意事項
 - 叫號看板需用戶先互動才能解鎖音效（瀏覽器限制）
-- PWA 圖示目前是 placeholder，需替換真正的 PNG 圖示
+- PWA 圖示已從 favicon.svg 生成正式 PNG（icon-512/192、apple-touch-icon、maskable）
 - PeerJS 使用公共信令伺服器 (0.peerjs.com)
+- 測試指引見 TESTING.md（P2P 多設備同步、BroadcastChannel、離線重連、CSP 驗證）

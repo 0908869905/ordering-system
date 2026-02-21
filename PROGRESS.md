@@ -1,5 +1,78 @@
 # 現場點餐系統 - 進度追蹤
 
+## Session: 2026-02-21 (2) - UI Iteration Wave 12~13 + Bug fixes + 圓形按鈕陰影修正
+
+> 分支：`feat/ui-iteration-2`（未合併至 main）
+
+### 之前 session 已完成（本分支上）
+- [x] Wave 1~11：UI 精緻化系列（去 AI 味、深色主題、動效增強、便利功能、一致性清掃等）
+- [x] Wave 12 (c1af689): 替換所有 6 個原生 `confirm()` 為自定義深色主題確認對話框 (ConfirmDialog)
+- [x] Wave 13 (c077953): 修復硬編碼字串 + 低庫存脈動動畫 + 設定標籤去重
+- [x] Bug fix (b812673): 修復分類標籤切換時卡片標題被遮擋的問題（sticky positioning bug）
+
+### 本次 session 完成
+- [x] 調查菜單 + 按鈕看起來不圓的問題（使用 Playwright 瀏覽器截圖調查）
+- [x] 診斷出 `woodblock-shadow-accent`（`3px 3px 0 0` 硬邊偏移陰影）讓 `rounded-full` 按鈕看起來不圓
+- [x] 修正 MenuItemCard.tsx：將 `woodblock-shadow-accent` 改為柔和圓形擴散陰影 `shadow-[0_2px_6px_rgba(194,54,22,0.4)]`
+
+### 修改檔案
+- `src/components/customer/MenuItemCard.tsx` - + 按鈕陰影從硬邊偏移改為柔和擴散（**未 commit**）
+
+### 待繼續的 UI 迭代項目
+- **Phase 2 HIGH**: KitchenLogin 加 loading state、破壞性操作後加 success toast、修復 focus indicators
+- **Phase 3 MEDIUM**: 可重用 form state utilities、語言切換按鈕、訂單取消 undo
+- ConnectionStatus.tsx 硬編碼錯誤字串 ('Failed to start host', 'Failed to connect')
+- 小圖示按鈕觸控目標改善
+
+### Commits（本分支累積，非本次 session）
+- `532b51f` ~ `c077953` — Wave 1~13 共 13 個 commit
+- 本次修改尚未 commit
+
+### 5-Question Reboot Check
+1. **做什麼？** `feat/ui-iteration-2` 分支上的 UI 迭代，本次修正菜單 + 按鈕的圓形陰影問題
+2. **進度？** 陰影修正已完成但未 commit；整個 UI 迭代分支仍有 Phase 2/3 項目待完成
+3. **下一步？** (1) commit 當前 MenuItemCard.tsx 修改 (2) Phase 2 HIGH 項目：KitchenLogin loading state、success toast、focus indicators (3) ConnectionStatus 硬編碼字串修復
+4. **阻礙？** 無技術阻礙；分支尚未合併至 main
+5. **檔案？** `src/components/customer/MenuItemCard.tsx`（未 commit 修改）、`src/components/kitchen/KitchenLogin.tsx`（Phase 2 loading state）、`src/components/shared/ConnectionStatus.tsx`（硬編碼字串）
+
+---
+
+## Session: 2026-02-21 - PWA 圖示生成 + CSP Headers + 測試指引
+
+### 完成項目
+- [x] PWA 圖示生成：用 sharp 從 `public/favicon.svg` 生成 4 個 PNG（icon-512.png、icon-192.png、apple-touch-icon.png、icon-maskable-512.png）
+- [x] 更新 vite.config.ts manifest 的 maskable 條目指向專用 `icon-maskable-512.png`
+- [x] CSP Headers：在 4 個 HTML（index/customer/kitchen/queue）加入 `<meta http-equiv="Content-Security-Policy">`
+- [x] CSP 策略允許 Google Fonts、PeerJS 信令伺服器（0.peerjs.com）、SVG data URI、PWA Service Worker
+- [x] 建立 TESTING.md：P2P 多設備同步測試指引（BroadcastChannel、PeerJS、離線重連、密碼相容性、CSP 驗證）
+- [x] 更新 git remote URL 到 `https://github.com/0908869905/ordering-system.git`
+- [x] `npm run build` 通過（零錯誤）
+- [x] 已 push 到遠端
+
+### 修改檔案
+- `public/icons/icon-512.png` - 新建：512x512 PWA 圖示（從 favicon.svg 生成）
+- `public/icons/icon-192.png` - 新建：192x192 PWA 圖示
+- `public/apple-touch-icon.png` - 新建：180x180 Apple Touch 圖示
+- `public/icons/icon-maskable-512.png` - 新建：512x512 Maskable 圖示（含安全區域 padding）
+- `vite.config.ts` - PWA manifest maskable icon 條目改指向 `icon-maskable-512.png`
+- `index.html` - 加入 CSP meta tag
+- `customer.html` - 加入 CSP meta tag
+- `kitchen.html` - 加入 CSP meta tag
+- `queue.html` - 加入 CSP meta tag
+- `TESTING.md` - 新建：P2P 多設備同步測試指引文件
+
+### Commits
+- `e5a015c` - feat: PWA 圖示生成 + CSP Headers + P2P 測試指引
+
+### 5-Question Reboot Check
+1. **做什麼？** PWA 圖示從 placeholder 替換為正式 PNG、加入 CSP 安全標頭、建立多設備同步測試指引
+2. **進度？** 100% 完成 — commit `e5a015c` 已 push
+3. **下一步？** (1) 按 TESTING.md 指引進行真實多設備 P2P 同步測試 (2) 考慮自架 PeerJS 信令伺服器取代公共伺服器 (3) CSP 在真實部署環境驗證（確認無 blocked resources） (4) 考慮 Lighthouse PWA 審計
+4. **阻礙？** PeerJS 仍使用公共信令伺服器（0.peerjs.com）；CSP 策略需在真實部署環境驗證是否有遺漏
+5. **檔案？** `TESTING.md`（測試指引）、`vite.config.ts`（PWA manifest）、`index.html`/`customer.html`/`kitchen.html`/`queue.html`（CSP headers）
+
+---
+
 ## Session: 2026-02-20 (2) - 安全掃描修復 + 程式碼簡化
 
 ### 完成項目

@@ -63,7 +63,7 @@ export default function MenuItemCard({ item, language, t, onClick }: Props) {
           {!isSoldOut && item.options.length === 0 && (
             <button
               onClick={handleQuickAdd}
-              className="flex h-10 w-10 items-center justify-center rounded-full bg-accent-600 text-white woodblock-shadow-accent transition-transform active:scale-90"
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-accent-600 text-white shadow-[0_2px_6px_rgba(194,54,22,0.4)] transition-transform active:scale-90"
             >
               <Plus className="h-4 w-4" />
             </button>

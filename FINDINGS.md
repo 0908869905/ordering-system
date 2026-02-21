@@ -750,7 +750,68 @@ JS bundle 主要組成：React + ReactDOM (~140 KB), PeerJS (~80 KB), Radix UI (
 
 ---
 
-### 7.5 日式裝飾圖案的 CSS 實現
+## 10. PWA 圖示生成與 CSP Headers (2026-02-21)
+
+> PWA 圖示從 SVG 自動生成 PNG、Content Security Policy 配置。
+
+### 10.1 從 SVG 自動生成多尺寸 PWA 圖示
+
+**問題**：PWA 需要多種尺寸的 PNG 圖示（512x512、192x192、180x180 Apple Touch、512x512 Maskable），手動製作耗時且容易不一致。
+
+**解決方案**：使用 Node.js `sharp` 套件從 `public/favicon.svg` 自動生成所有尺寸：
+- `icon-512.png`（512x512）— 標準 PWA 圖示
+- `icon-192.png`（192x192）— 標準 PWA 圖示
+- `apple-touch-icon.png`（180x180）— iOS Safari 主畫面圖示
+- `icon-maskable-512.png`（512x512，含安全區域 padding）— Android Adaptive Icon
+
+**Maskable 圖示注意**：Maskable icon 需在圖示四周保留至少 10% 的安全區域（safe zone），否則在圓形/方形裁切時圖示會被截斷。使用 sharp 的 `extend()` 方法加上透明 padding 實現。
+
+**選擇理由**：sharp 是 Node.js 生態中效能最佳的圖片處理庫（基於 libvips），比 canvas/jimp 快 10x。一次性腳本使用 `--save-dev` 安裝，不影響生產 bundle。
+
+### 10.2 Content Security Policy (CSP) 配置
+
+**問題**：PWA 應用缺少 CSP headers，存在 XSS 攻擊風險。
+
+**解決方案**：在 4 個 HTML 入口檔加入 `<meta http-equiv="Content-Security-Policy">` meta tag，針對本專案的需求配置：
+
+| 指令 | 值 | 原因 |
+|------|-----|------|
+| `default-src` | `'self'` | 預設只允許同源資源 |
+| `script-src` | `'self'` | 只允許同源腳本（阻擋 inline script） |
+| `style-src` | `'self' 'unsafe-inline' fonts.googleapis.com` | Tailwind CSS 需要 inline style；Google Fonts CSS |
+| `font-src` | `'self' fonts.gstatic.com` | Google Fonts 字型檔來源 |
+| `img-src` | `'self' data:` | SVG data URI 圖案（青海波等） |
+| `connect-src` | `'self' wss://0.peerjs.com https://0.peerjs.com` | PeerJS 信令伺服器 WebSocket/HTTPS |
+| `worker-src` | `'self'` | PWA Service Worker |
+
+**注意事項**：
+- `'unsafe-inline'` 在 `style-src` 中是必要的，因為 Tailwind CSS 和 Radix UI 動態注入 inline style。若未來要移除，需改用 nonce 或 hash 方案。
+- PeerJS 公共伺服器的 CSP 白名單（`0.peerjs.com`），若自架信令伺服器需更新此配置。
+- 使用 `<meta>` tag 而非 HTTP header，因為靜態託管（如 GitHub Pages、Netlify）不一定支援自訂 HTTP headers。
+
+**選擇理由**：`<meta>` tag 方式跨平台最相容，且與 HTML 檔一起版控。HTTP header 方式需要伺服器端配置，不適合靜態託管場景。
+
+---
+
+### 7.5 硬邊偏移陰影與 rounded-full 的視覺衝突
+
+**問題**：菜單卡片上的 + 快速加入按鈕已設定 `rounded-full`（完美圓形），但用戶反饋按鈕看起來「不圓」。
+
+**原因**：按鈕使用了自定義 CSS class `woodblock-shadow-accent`，其陰影值為 `3px 3px 0 0`（硬邊偏移陰影，無模糊擴散）。這種陰影在按鈕右下方產生一個方形突出塊，破壞了視覺上的圓形感。人眼會將陰影視為物體形狀的延伸，因此即使元素本身是圓的，方形硬邊陰影讓整體輪廓看起來不規則。
+
+**解決方案**：將 `woodblock-shadow-accent` 替換為柔和的圓形擴散陰影：
+```
+shadow-[0_2px_6px_rgba(194,54,22,0.4)]
+```
+- `0` 水平偏移 + `2px` 垂直偏移：輕微向下，不破壞對稱感
+- `6px` 模糊半徑：擴散陰影沿圓形邊緣均勻分布
+- `rgba(194,54,22,0.4)`：保留品牌朱紅色調（accent-600），40% 透明度
+
+**選擇理由**：木版印刷風格（woodblock）的硬邊陰影適合方形/矩形卡片，但不適合圓形按鈕。圓形元素的陰影應使用模糊擴散（blur spread），讓陰影形狀自然跟隨元素的圓形輪廓。這是一個通用的 CSS 設計原則：**陰影風格應與元素形狀匹配**。
+
+---
+
+### 7.6 日式裝飾圖案的 CSS 實現
 
 **問題**：青海波（seigaiha）、雲紋等日式圖案傳統上使用圖片，但圖片會增加 bundle 大小且不易調整顏色。
 
