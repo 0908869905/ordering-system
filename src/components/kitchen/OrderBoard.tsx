@@ -56,10 +56,10 @@ export default function OrderBoard({ t, language }: Props) {
       <div className="flex items-center gap-4 border-b border-warm-800/20 bg-[#252118] px-4 py-2">
         <Receipt className="h-4 w-4 text-primary-400" />
         <span className="text-xs font-heading text-warm-400">
-          {language === 'zh' ? '今日' : 'Today'}
+          {t.today}
         </span>
         <span className="font-mono text-sm font-bold text-warm-200">
-          {todayStats.count} {language === 'zh' ? '單' : 'orders'}
+          {todayStats.count} {t.ordersUnit}
         </span>
         <div className="h-3 w-px bg-warm-700/50" />
         <span className="font-mono text-sm font-bold text-primary-400">

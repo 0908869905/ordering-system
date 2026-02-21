@@ -108,7 +108,7 @@ export default function KitchenSettings({ t }: Props) {
         </h3>
         <div className="flex flex-col gap-3">
           <div className="flex items-center justify-between">
-            <span className="text-sm font-heading text-warm-300">{t.soundEnabled}</span>
+            <span className="text-sm font-heading text-warm-300">{t.notificationSound}</span>
             <ToggleSwitch checked={soundEnabled} onChange={() => setSoundEnabled(!soundEnabled)} />
           </div>
           <div className="flex items-center justify-between">

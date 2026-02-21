@@ -72,8 +72,8 @@ export default function ItemDetail({ t, item, language, onClose }: Props) {
         )}
 
         {item.stock > 0 && item.stock <= 5 && (
-          <p className="text-xs text-amber-600 font-heading animate-fade-in">
-            {language === 'zh' ? `僅剩 ${item.stock} 份` : `Only ${item.stock} left`}
+          <p className="text-xs text-amber-600 font-heading animate-pulse-soft">
+            {t.stockLeft.replace('{n}', String(item.stock))}
           </p>
         )}
 
