@@ -3,7 +3,6 @@ import { Package, RotateCcw } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
-import { Card, CardContent } from '@/components/ui/card'
 import { useMenuStore } from '@/stores/useMenuStore'
 import { localized } from '@/lib/utils'
 import type { Language } from '@/types'
@@ -41,9 +40,9 @@ export default function InventoryPanel({ t, language }: Props) {
   }
 
   return (
-    <div className="p-4">
+    <div className="p-4 animate-fade-in">
       <div className="mb-4 flex items-center justify-between">
-        <h2 className="flex items-center gap-2 font-heading text-lg font-bold">
+        <h2 className="flex items-center gap-2 font-heading text-lg font-bold ink-text">
           <Package className="h-5 w-5" />
           {t.inventory}
         </h2>
@@ -70,18 +69,22 @@ export default function InventoryPanel({ t, language }: Props) {
 
         return (
           <div key={cat.id} className="mb-6">
-            <h3 className="mb-2 font-semibold text-[hsl(var(--muted-foreground))]">
-              {localized(language, cat.name, cat.nameEn)}
-            </h3>
+            <div className="flex items-center gap-2 mb-3">
+              <div className="brush-divider flex-1" style={{ opacity: 0.3 }} />
+              <h3 className="font-heading font-semibold text-warm-500 shrink-0">
+                {localized(language, cat.name, cat.nameEn)}
+              </h3>
+              <div className="brush-divider flex-1" style={{ opacity: 0.3 }} />
+            </div>
             <div className="flex flex-col gap-2">
               {catItems.map((item) => {
                 const name = localized(language, item.name, item.nameEn)
                 return (
-                  <Card key={item.id}>
-                    <CardContent className="flex items-center gap-3 p-3">
+                  <div key={item.id} className="organic-radius border border-warm-800/30 bg-[#2e2a22] p-3">
+                    <div className="flex items-center gap-3">
                       <div className="flex-1">
-                        <span className="font-medium">{name}</span>
-                        <span className="ml-2 text-sm text-[hsl(var(--muted-foreground))]">
+                        <span className="font-heading font-medium">{name}</span>
+                        <span className="ml-2 text-sm text-warm-600 font-mono">
                           ${item.price}
                         </span>
                       </div>
@@ -114,7 +117,7 @@ export default function InventoryPanel({ t, language }: Props) {
                             variant={
                               getStockBadgeVariant(item.available, item.stock)
                             }
-                            className="cursor-pointer"
+                            className="cursor-pointer hover:ring-2 hover:ring-primary-400/50 transition-all"
                             onClick={() => {
                               setEditingId(item.id)
                               setEditValue(item.stock.toString())
@@ -129,7 +132,7 @@ export default function InventoryPanel({ t, language }: Props) {
                             <Button
                               variant="outline"
                               size="sm"
-                              className="text-[hsl(var(--destructive))]"
+                              className="text-accent-500 border-accent-500/30 hover:bg-accent-500/10"
                               onClick={() =>
                                 setItemAvailability(item.id, false)
                               }
@@ -140,7 +143,7 @@ export default function InventoryPanel({ t, language }: Props) {
                             <Button
                               variant="outline"
                               size="sm"
-                              className="text-[hsl(var(--success))]"
+                              className="text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/10"
                               onClick={() =>
                                 setItemAvailability(item.id, true)
                               }
@@ -150,8 +153,8 @@ export default function InventoryPanel({ t, language }: Props) {
                           )}
                         </div>
                       )}
-                    </CardContent>
-                  </Card>
+                    </div>
+                  </div>
                 )
               })}
             </div>

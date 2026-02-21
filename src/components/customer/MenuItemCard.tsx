@@ -1,5 +1,4 @@
 import { Plus } from 'lucide-react'
-import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { useCartStore } from '@/stores/useCartStore'
 import { localized } from '@/lib/utils'
@@ -33,15 +32,15 @@ export default function MenuItemCard({ item, language, t, onClick }: Props) {
   }
 
   return (
-    <Card
-      className={`menu-card relative cursor-pointer overflow-hidden border-l-[3px] border-l-primary-300 ${
+    <div
+      className={`menu-card tape-decoration relative cursor-pointer overflow-hidden border border-primary-200/60 bg-[#fdfcf8] organic-radius ${
         isSoldOut ? 'opacity-60' : ''
       }`}
       onClick={isSoldOut ? undefined : onClick}
     >
-      <div className="p-3">
+      <div className="p-3 pt-4">
         <div className="flex items-start justify-between gap-1">
-          <h3 className="font-body text-sm font-bold leading-tight">{name}</h3>
+          <h3 className="font-heading text-sm font-bold leading-tight ink-text">{name}</h3>
           {item.stock > 0 && item.stock <= 5 && (
             <Badge variant="warning" className="shrink-0 text-[10px]">
               {item.stock}
@@ -53,32 +52,36 @@ export default function MenuItemCard({ item, language, t, onClick }: Props) {
             {localized(language, item.description, item.descriptionEn)}
           </p>
         )}
-        <div className="mt-2 flex items-center justify-between">
-          <span className="font-heading text-base font-bold text-accent-600">
-            ${item.price}
-          </span>
+        {/* 毛筆分隔線 */}
+        <div className="brush-divider my-2 w-2/3" />
+        <div className="flex items-center justify-between">
+          {/* 朱印價格 */}
+          <div className="price-stamp">
+            <span className="text-[10px] leading-none">$</span>
+            <span>{item.price}</span>
+          </div>
           {!isSoldOut && item.options.length === 0 && (
             <button
               onClick={handleQuickAdd}
-              className="flex h-8 w-8 items-center justify-center rounded-full bg-accent-600 text-white transition-transform active:scale-90"
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-accent-600 text-white woodblock-shadow-accent transition-transform active:scale-90"
             >
               <Plus className="h-4 w-4" />
             </button>
           )}
           {item.options.length > 0 && !isSoldOut && (
-            <span className="text-xs text-warm-500">
+            <span className="text-xs text-warm-500 font-heading">
               {t.options}
             </span>
           )}
         </div>
       </div>
       {isSoldOut && (
-        <div className="absolute inset-0 flex items-center justify-center bg-warm-950/40">
-          <span className="font-heading text-lg font-bold text-white border-2 border-white rounded-lg px-3 py-1 rotate-[-12deg]">
+        <div className="absolute inset-0 flex items-center justify-center bg-warm-950/30">
+          <span className="sold-stamp text-base font-bold rotate-[-12deg]">
             {t.soldOut}
           </span>
         </div>
       )}
-    </Card>
+    </div>
   )
 }

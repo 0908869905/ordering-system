@@ -93,52 +93,52 @@ export default function RevenueReport({ t, language }: Props) {
 
   if (stats.orderCount === 0 && revenueAdjustments.length === 0) {
     return (
-      <div className="flex flex-1 items-center justify-center p-8 text-[hsl(var(--muted-foreground))]">
+      <div className="flex flex-1 items-center justify-center p-8 text-warm-600 font-heading">
         {t.noOrders}
       </div>
     )
   }
 
   return (
-    <div className="p-4">
+    <div className="p-4 animate-fade-in">
       {/* KPI Cards */}
       <div className="mb-6 grid grid-cols-3 gap-3">
-        <Card>
+        <Card className="organic-radius">
           <CardContent className="p-4 text-center">
-            <DollarSign className="mx-auto mb-1 h-6 w-6 text-[hsl(var(--success))]" />
-            <p className="text-xs text-[hsl(var(--muted-foreground))]">
+            <DollarSign className="mx-auto mb-1 h-6 w-6 text-emerald-400" />
+            <p className="text-xs text-warm-500 font-heading">
               {t.totalRevenue}
             </p>
-            <p className="font-heading text-2xl font-black text-[hsl(var(--success))]">
+            <p className="font-heading text-2xl font-black text-emerald-400 ink-text">
               ${stats.totalRevenue}
             </p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="organic-radius-alt">
           <CardContent className="p-4 text-center">
-            <ShoppingBag className="mx-auto mb-1 h-6 w-6 text-[hsl(var(--primary))]" />
-            <p className="text-xs text-[hsl(var(--muted-foreground))]">
+            <ShoppingBag className="mx-auto mb-1 h-6 w-6 text-primary-400" />
+            <p className="text-xs text-warm-500 font-heading">
               {t.totalOrders}
             </p>
-            <p className="font-heading text-2xl font-black">{stats.orderCount}</p>
+            <p className="font-heading text-2xl font-black text-primary-400 ink-text">{stats.orderCount}</p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="organic-radius">
           <CardContent className="p-4 text-center">
-            <TrendingUp className="mx-auto mb-1 h-6 w-6 text-[hsl(var(--warning))]" />
-            <p className="text-xs text-[hsl(var(--muted-foreground))]">
+            <TrendingUp className="mx-auto mb-1 h-6 w-6 text-amber-400" />
+            <p className="text-xs text-warm-500 font-heading">
               {t.averageOrder}
             </p>
-            <p className="font-heading text-2xl font-black">${stats.averageOrder}</p>
+            <p className="font-heading text-2xl font-black text-amber-400 ink-text">${stats.averageOrder}</p>
           </CardContent>
         </Card>
       </div>
 
       {/* Top Items */}
       {stats.topItems.length > 0 && (
-        <Card className="mb-6">
+        <Card className="mb-6 organic-radius-alt">
           <CardHeader className="pb-2">
-            <CardTitle className="text-base">{t.topItems}</CardTitle>
+            <CardTitle className="text-base font-heading ink-text">{t.topItems}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
@@ -148,20 +148,23 @@ export default function RevenueReport({ t, language }: Props) {
                   (item.quantity / (stats.topItems[0]?.quantity ?? 1)) * 100
                 return (
                   <div key={idx} className="flex items-center gap-3">
-                    <span className="w-6 text-right text-sm font-bold text-[hsl(var(--muted-foreground))]">
+                    <span className="w-6 text-right text-sm font-bold font-mono text-warm-500">
                       {idx + 1}
                     </span>
                     <div className="flex-1">
                       <div className="flex justify-between text-sm">
-                        <span className="font-medium">{name}</span>
-                        <span className="text-[hsl(var(--muted-foreground))]">
+                        <span className="font-heading font-medium">{name}</span>
+                        <span className="text-warm-500 font-mono text-xs">
                           {item.quantity} {t.salesQuantity} / ${item.revenue}
                         </span>
                       </div>
-                      <div className="mt-1 h-2 overflow-hidden rounded-full bg-[hsl(var(--secondary))]">
+                      <div className="mt-1 h-2 overflow-hidden rounded-full bg-warm-800/50">
                         <div
-                          className="h-full rounded-full bg-[hsl(var(--primary))]"
-                          style={{ width: `${widthPercent}%` }}
+                          className="h-full rounded-full bg-primary-400 origin-left"
+                          style={{
+                            width: `${widthPercent}%`,
+                            animation: `bar-grow 0.6s ease-out ${idx * 0.1}s both`,
+                          }}
                         />
                       </div>
                     </div>
@@ -175,9 +178,9 @@ export default function RevenueReport({ t, language }: Props) {
 
       {/* Hourly Distribution */}
       {Object.keys(stats.hourlyOrders).length > 0 && (
-        <Card className="mb-6">
+        <Card className="mb-6 organic-radius">
           <CardHeader className="pb-2">
-            <CardTitle className="text-base">{t.hourlyDistribution}</CardTitle>
+            <CardTitle className="text-base font-heading ink-text">{t.hourlyDistribution}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex h-32 items-end gap-1">
@@ -188,11 +191,16 @@ export default function RevenueReport({ t, language }: Props) {
                 return (
                   <div key={h} className="flex flex-1 flex-col items-center">
                     <div
-                      className="w-full rounded-t bg-primary-400 transition-all"
-                      style={{ height: `${height}%`, minHeight: count > 0 ? '4px' : '0' }}
+                      className="w-full rounded-t bg-primary-400/80 origin-bottom"
+                      style={{
+                        height: `${height}%`,
+                        minHeight: count > 0 ? '4px' : '0',
+                        animation: count > 0 ? `bar-grow 0.5s ease-out ${h * 0.03}s both` : 'none',
+                        transformOrigin: 'bottom',
+                      }}
                     />
-                    {h % 3 === 0 && (
-                      <span className="mt-1 text-[9px] text-[hsl(var(--muted-foreground))]">
+                    {h % 2 === 0 && (
+                      <span className="mt-1 text-[9px] text-warm-600 font-mono">
                         {h}
                       </span>
                     )}
@@ -205,9 +213,9 @@ export default function RevenueReport({ t, language }: Props) {
       )}
 
       {/* Revenue Adjustments */}
-      <Card>
+      <Card className="organic-radius-alt">
         <CardHeader className="pb-2">
-          <CardTitle className="text-base">{t.manualAdjust}</CardTitle>
+          <CardTitle className="text-base font-heading ink-text">{t.manualAdjust}</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="mb-3 flex gap-2">
@@ -233,13 +241,13 @@ export default function RevenueReport({ t, language }: Props) {
               key={adj.id}
               className="flex items-center justify-between py-1 text-sm"
             >
-              <span>
+              <span className="font-heading">
                 {adj.reason}:{' '}
                 <span
                   className={
                     adj.amount >= 0
-                      ? 'text-[hsl(var(--success))]'
-                      : 'text-[hsl(var(--destructive))]'
+                      ? 'text-emerald-400'
+                      : 'text-accent-500'
                   }
                 >
                   {adj.amount >= 0 ? '+' : ''}${adj.amount}

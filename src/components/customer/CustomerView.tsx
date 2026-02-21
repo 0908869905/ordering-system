@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { ArrowLeft, ShoppingCart } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -31,6 +31,28 @@ export default function CustomerView({ t }: Props) {
     orderNumber: number
     totalAmount: number
   } | null>(null)
+
+  // Toast notification state
+  const [toast, setToast] = useState<{ message: string; visible: boolean } | null>(null)
+
+  const showToast = useCallback((message: string) => {
+    setToast({ message, visible: true })
+    setTimeout(() => setToast((prev) => prev ? { ...prev, visible: false } : null), 1800)
+    setTimeout(() => setToast(null), 2100)
+  }, [])
+
+  // Listen for cart additions via ref tracking
+  const prevCountRef = useRef(useCartStore.getState().items.length)
+  useEffect(() => {
+    const unsub = useCartStore.subscribe((state) => {
+      const curr = state.items.length
+      if (curr > prevCountRef.current) {
+        showToast(language === 'zh' ? '已加入購物車！' : 'Added to cart!')
+      }
+      prevCountRef.current = curr
+    })
+    return unsub
+  }, [showToast, language])
 
   const handleSubmitOrder = () => {
     if (cartItems.length === 0) return
@@ -71,9 +93,9 @@ export default function CustomerView({ t }: Props) {
   const itemCount = getItemCount()
 
   return (
-    <div className="flex min-h-dvh flex-col no-select">
+    <div className="washi-overlay flex min-h-dvh flex-col no-select">
       {/* Header */}
-      <header className="sticky top-0 z-30 flex items-center gap-3 border-b border-warm-200 bg-white/90 px-4 py-3 backdrop-blur">
+      <header className="sticky top-0 z-30 flex items-center gap-3 border-b border-primary-200/40 bg-[#fdfcf8]/90 px-4 py-3 backdrop-blur">
         <Button
           variant="ghost"
           size="icon"
@@ -81,7 +103,7 @@ export default function CustomerView({ t }: Props) {
         >
           <ArrowLeft />
         </Button>
-        <h1 className="flex-1 font-heading text-lg font-bold">{t.menu}</h1>
+        <h1 className="flex-1 font-heading text-lg font-bold ink-text">{t.menu}</h1>
         <span className="font-decorative text-sm text-primary-500 tracking-wider">宏麵屋</span>
       </header>
 
@@ -95,16 +117,16 @@ export default function CustomerView({ t }: Props) {
         />
       </div>
 
-      {/* Cart Floating Bar */}
+      {/* Cart Floating Bar — 暖簾風格 */}
       {itemCount > 0 && !showCart && (
-        <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-warm-200 bg-warm-50/95 p-3 shadow-lg floating-bar backdrop-blur">
+        <div className="fixed bottom-0 left-0 right-0 z-40 noren-edge bg-[#fdfcf8]/95 p-3 floating-bar backdrop-blur border-t border-primary-200/40">
           <Button
-            className="w-full bg-accent-600 hover:bg-accent-700 text-white"
+            className="w-full bg-accent-600 hover:bg-accent-700 text-white woodblock-shadow-accent"
             size="lg"
             onClick={() => setShowCart(true)}
           >
             <ShoppingCart className="!size-5" />
-            <span>{t.cart}</span>
+            <span className="font-heading">{t.cart}</span>
             <Badge variant="secondary" className="ml-1 bg-white/20 text-white border-0">
               {itemCount}
             </Badge>
@@ -121,6 +143,15 @@ export default function CustomerView({ t }: Props) {
           onClose={() => setShowCart(false)}
           onSubmit={handleSubmitOrder}
         />
+      )}
+
+      {/* Toast Notification */}
+      {toast && (
+        <div className={`fixed bottom-24 left-1/2 -translate-x-1/2 z-50 ${toast.visible ? 'toast-enter' : 'toast-exit'}`}>
+          <div className="bg-warm-900/90 text-white px-5 py-2.5 organic-radius font-heading text-sm backdrop-blur whitespace-nowrap">
+            {toast.message}
+          </div>
+        </div>
       )}
     </div>
   )

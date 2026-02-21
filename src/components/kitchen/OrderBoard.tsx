@@ -36,17 +36,17 @@ export default function OrderBoard({ t, language }: Props) {
   return (
     <div className="grid h-full grid-cols-1 gap-0 md:grid-cols-3">
       {/* Unpaid */}
-      <div className="flex flex-col border-b border-[hsl(var(--border))] md:border-b-0 md:border-r">
-        <div className="sticky top-0 flex items-center gap-2 bg-red-500/10 px-4 py-3">
+      <div className="flex flex-col border-b border-warm-800/20 md:border-b-0 md:border-r">
+        <div className="sticky top-0 flex items-center gap-2 bg-red-900/20 px-4 py-3 border-b border-red-500/20">
           <div className="h-3 w-3 rounded-full bg-red-500" />
-          <h2 className="font-heading font-bold text-red-400">
+          <h2 className="font-heading font-bold text-red-400 ink-text">
             {t.unpaid}
           </h2>
-          <span className="ml-auto rounded-full bg-red-500 px-2 py-0.5 text-xs font-bold text-white">
+          <span className="ml-auto rounded-full bg-red-500 px-2.5 py-0.5 text-xs font-bold text-white font-mono">
             {unpaidOrders.length}
           </span>
         </div>
-        <div className="flex flex-col gap-2 p-3">
+        <div className="flex flex-col gap-3 p-3">
           {unpaidOrders.map((order) => (
             <OrderCard
               key={order.id}
@@ -70,7 +70,7 @@ export default function OrderBoard({ t, language }: Props) {
             />
           ))}
           {unpaidOrders.length === 0 && (
-            <p className="py-8 text-center text-sm text-[hsl(var(--muted-foreground))]">
+            <p className="py-8 text-center text-sm font-heading text-warm-600">
               {t.noData}
             </p>
           )}
@@ -78,15 +78,15 @@ export default function OrderBoard({ t, language }: Props) {
       </div>
 
       {/* Preparing */}
-      <div className="flex flex-col border-b border-[hsl(var(--border))] md:border-b-0 md:border-r">
-        <div className="sticky top-0 flex items-center gap-2 bg-amber-500/10 px-4 py-3">
+      <div className="flex flex-col border-b border-warm-800/20 md:border-b-0 md:border-r">
+        <div className="sticky top-0 flex items-center gap-2 bg-amber-900/20 px-4 py-3 border-b border-amber-500/20">
           <div className="h-3 w-3 rounded-full bg-amber-500" />
-          <h2 className="font-heading font-bold text-amber-400">{t.preparing}</h2>
-          <span className="ml-auto rounded-full bg-amber-500 px-2 py-0.5 text-xs font-bold text-white">
+          <h2 className="font-heading font-bold text-amber-400 ink-text">{t.preparing}</h2>
+          <span className="ml-auto rounded-full bg-amber-500 px-2.5 py-0.5 text-xs font-bold text-white font-mono">
             {preparingOrders.length}
           </span>
         </div>
-        <div className="flex flex-col gap-2 p-3">
+        <div className="flex flex-col gap-3 p-3">
           {preparingOrders.map((order) => (
             <OrderCard
               key={order.id}
@@ -101,7 +101,7 @@ export default function OrderBoard({ t, language }: Props) {
             />
           ))}
           {preparingOrders.length === 0 && (
-            <p className="py-8 text-center text-sm text-[hsl(var(--muted-foreground))]">
+            <p className="py-8 text-center text-sm font-heading text-warm-600">
               {t.noData}
             </p>
           )}
@@ -110,14 +110,14 @@ export default function OrderBoard({ t, language }: Props) {
 
       {/* Completed */}
       <div className="flex flex-col">
-        <div className="sticky top-0 flex items-center gap-2 bg-emerald-500/10 px-4 py-3">
+        <div className="sticky top-0 flex items-center gap-2 bg-emerald-900/20 px-4 py-3 border-b border-emerald-500/20">
           <div className="h-3 w-3 rounded-full bg-emerald-500" />
-          <h2 className="font-heading font-bold text-emerald-400">{t.completed}</h2>
-          <span className="ml-auto rounded-full bg-emerald-500 px-2 py-0.5 text-xs font-bold text-white">
+          <h2 className="font-heading font-bold text-emerald-400 ink-text">{t.completed}</h2>
+          <span className="ml-auto rounded-full bg-emerald-500 px-2.5 py-0.5 text-xs font-bold text-white font-mono">
             {completedOrders.length}
           </span>
         </div>
-        <div className="flex flex-col gap-2 p-3">
+        <div className="flex flex-col gap-3 p-3">
           {completedOrders.map((order) => (
             <OrderCard
               key={order.id}
@@ -132,7 +132,7 @@ export default function OrderBoard({ t, language }: Props) {
             />
           ))}
           {completedOrders.length === 0 && (
-            <p className="py-8 text-center text-sm text-[hsl(var(--muted-foreground))]">
+            <p className="py-8 text-center text-sm font-heading text-warm-600">
               {t.noData}
             </p>
           )}

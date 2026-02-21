@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { Clock } from 'lucide-react'
-import { Card, CardContent } from '@/components/ui/card'
+import { CardContent } from '@/components/ui/card'
 import { Button, type ButtonProps } from '@/components/ui/button'
 import { localized } from '@/lib/utils'
 import type { Order, Language } from '@/types'
@@ -32,23 +32,29 @@ export default function OrderCard({
   }, [order.createdAt])
 
   let waitColor = 'text-[hsl(var(--muted-foreground))]'
+  let urgencyBg = ''
   if (waitMinutes > 10) {
     waitColor = 'text-[hsl(var(--destructive))]'
+    urgencyBg = 'bg-red-500/5'
   } else if (waitMinutes > 5) {
     waitColor = 'text-amber-600'
+    urgencyBg = 'bg-amber-500/5'
   }
 
   return (
-    <Card className="overflow-hidden bg-[#2e2a22] border-l-[3px] border-l-current">
-      <CardContent className="p-3">
+    <div className={`receipt-edge pin-decoration overflow-hidden bg-[#2e2a22] border-l-[3px] border-l-current organic-radius ${urgencyBg}`}>
+      <CardContent className="p-3 pt-4">
         {/* Header Row */}
         <div className="mb-2 flex items-center justify-between">
-          <span className="font-mono text-2xl font-black">#{order.orderNumber}</span>
+          <span className="font-mono text-2xl font-black ink-text">#{order.orderNumber}</span>
           <div className={`flex items-center gap-1 text-xs ${waitColor}`}>
             <Clock className="h-3 w-3" />
             {waitMinutes} {t.minutes}
           </div>
         </div>
+
+        {/* 虛線分隔（像收據） */}
+        <div className="mb-2 border-t border-dashed border-warm-600/30" />
 
         {/* Items */}
         <div className="mb-2 space-y-1 text-sm">
@@ -56,7 +62,7 @@ export default function OrderCard({
             const name = localized(language, item.name, item.nameEn)
             return (
               <div key={idx} className="flex justify-between">
-                <span>
+                <span className="font-heading">
                   {name} x{item.quantity}
                   {item.selectedOptions.length > 0 && (
                     <span className="ml-1 text-xs text-[hsl(var(--muted-foreground))]">
@@ -68,7 +74,7 @@ export default function OrderCard({
                     </span>
                   )}
                 </span>
-                <span className="shrink-0">${item.subtotal}</span>
+                <span className="shrink-0 font-mono">${item.subtotal}</span>
               </div>
             )
           })}
@@ -89,9 +95,9 @@ export default function OrderCard({
         </div>
 
         {/* Total */}
-        <div className="mb-3 flex items-center justify-between border-t border-[hsl(var(--border))] pt-2 font-bold">
-          <span>{t.total}</span>
-          <span>${order.totalAmount}</span>
+        <div className="mb-3 flex items-center justify-between border-t border-dashed border-warm-600/30 pt-2 font-bold">
+          <span className="font-heading">{t.total}</span>
+          <span className="font-mono">${order.totalAmount}</span>
         </div>
 
         {/* Actions */}
@@ -117,6 +123,6 @@ export default function OrderCard({
           )}
         </div>
       </CardContent>
-    </Card>
+    </div>
   )
 }

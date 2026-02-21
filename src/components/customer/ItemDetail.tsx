@@ -56,14 +56,17 @@ export default function ItemDetail({ t, item, language, onClose }: Props) {
     <Dialog open onOpenChange={onClose}>
       <DialogContent className="max-w-md">
         <DialogHeader>
-          <DialogTitle className="text-xl">{name}</DialogTitle>
-          <DialogDescription className="font-heading text-lg font-bold text-accent-600">
-            ${item.price}
+          <DialogTitle className="font-heading text-xl ink-text">{name}</DialogTitle>
+          <DialogDescription>
+            <span className="price-stamp inline-flex" style={{ width: 48, height: 48, fontSize: 13 }}>
+              <span className="text-[9px] leading-none">$</span>
+              <span>{item.price}</span>
+            </span>
           </DialogDescription>
         </DialogHeader>
 
         {item.description && (
-          <p className="text-sm text-[hsl(var(--muted-foreground))]">
+          <p className="text-sm text-warm-500">
             {localized(language, item.description ?? '', item.descriptionEn)}
           </p>
         )}
@@ -71,7 +74,7 @@ export default function ItemDetail({ t, item, language, onClose }: Props) {
         {/* Options */}
         {item.options.length > 0 && (
           <div>
-            <h4 className="mb-2 font-medium">{t.options}</h4>
+            <h4 className="mb-2 font-heading font-medium ink-text">{t.options}</h4>
             <div className="flex flex-col gap-2">
               {item.options.map((option) => {
                 const optName = localized(language, option.name, option.nameEn)
@@ -82,14 +85,14 @@ export default function ItemDetail({ t, item, language, onClose }: Props) {
                   <button
                     key={option.id}
                     onClick={() => toggleOption(option)}
-                    className={`flex items-center justify-between rounded-lg border-2 p-3 text-left transition-colors ${
+                    className={`flex items-center justify-between organic-radius border-2 p-3 text-left transition-all ${
                       isSelected
-                        ? 'border-primary-400 bg-primary-50'
-                        : 'border-warm-200'
+                        ? 'border-primary-400 bg-primary-50 woodblock-shadow'
+                        : 'border-warm-200 hover:border-primary-200'
                     }`}
                   >
-                    <span className="font-medium">{optName}</span>
-                    <span className="text-sm text-[hsl(var(--muted-foreground))]">
+                    <span className="font-heading font-medium">{optName}</span>
+                    <span className="text-sm text-warm-500 font-heading">
                       +${option.price}
                     </span>
                   </button>
@@ -101,32 +104,34 @@ export default function ItemDetail({ t, item, language, onClose }: Props) {
 
         {/* Notes */}
         <div>
-          <h4 className="mb-2 font-medium">{t.notes}</h4>
+          <h4 className="mb-2 font-heading font-medium ink-text">{t.notes}</h4>
           <Textarea
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
             placeholder={t.notesPlaceholder}
-            className="resize-none"
+            className="resize-none organic-radius"
             rows={2}
           />
         </div>
 
         {/* Quantity */}
         <div className="flex items-center justify-between">
-          <span className="font-medium">{t.quantity}</span>
+          <span className="font-heading font-medium ink-text">{t.quantity}</span>
           <div className="flex items-center gap-3">
             <Button
               variant="outline"
               size="icon"
+              className="organic-radius"
               onClick={() => setQuantity((q) => Math.max(1, q - 1))}
               disabled={quantity <= 1}
             >
               <Minus />
             </Button>
-            <span className="w-8 text-center text-lg font-bold">{quantity}</span>
+            <span className="w-8 text-center text-lg font-heading font-bold">{quantity}</span>
             <Button
               variant="outline"
               size="icon"
+              className="organic-radius-alt"
               onClick={() => setQuantity((q) => q + 1)}
             >
               <Plus />
@@ -134,8 +139,11 @@ export default function ItemDetail({ t, item, language, onClose }: Props) {
           </div>
         </div>
 
+        {/* 毛筆分隔線 */}
+        <div className="brush-divider w-full" />
+
         {/* Add Button */}
-        <Button size="lg" className="w-full text-base bg-accent-600 hover:bg-accent-700 text-white" onClick={handleAdd}>
+        <Button size="lg" className="w-full text-base bg-accent-600 hover:bg-accent-700 text-white woodblock-shadow-accent" onClick={handleAdd}>
           {t.addToCart} - <span className="font-heading font-bold">${subtotal}</span>
         </Button>
       </DialogContent>

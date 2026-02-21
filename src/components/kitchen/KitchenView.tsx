@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { ArrowLeft, ClipboardList, Package, FileEdit, BarChart3, Settings, LogOut } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useSettingsStore } from '@/stores/useSettingsStore'
@@ -24,6 +24,8 @@ export default function KitchenView({ t }: Props) {
     useSettingsStore()
   const [activeTab, setActiveTab] = useState<KitchenTab>('orders')
   const peer = usePeerSync()
+  const tabBarRef = useRef<HTMLDivElement>(null)
+  const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0 })
 
   // Auto-start as host when kitchen view loads
   useEffect(() => {
@@ -46,6 +48,18 @@ export default function KitchenView({ t }: Props) {
     })
     return unsubscribe
   }, [peer.broadcastMenuSync, peer.broadcastInventorySync])
+
+  // Tab indicator sliding animation
+  useEffect(() => {
+    if (!tabBarRef.current) return
+    const activeBtn = tabBarRef.current.querySelector(`[data-tab="${activeTab}"]`) as HTMLElement | null
+    if (activeBtn) {
+      setIndicatorStyle({
+        left: activeBtn.offsetLeft,
+        width: activeBtn.offsetWidth,
+      })
+    }
+  }, [activeTab])
 
   if (!isKitchenAuthenticated) {
     return <KitchenLogin t={t} />
@@ -71,7 +85,7 @@ export default function KitchenView({ t }: Props) {
         >
           <ArrowLeft />
         </Button>
-        <h1 className="flex-1 font-heading text-lg font-bold text-primary-400">
+        <h1 className="flex-1 font-heading text-lg font-bold text-primary-400 ink-text">
           {t.kitchenManage}
         </h1>
         <ConnectionStatus
@@ -98,15 +112,16 @@ export default function KitchenView({ t }: Props) {
         </Button>
       </header>
 
-      {/* Tab Bar */}
-      <div className="flex overflow-x-auto border-b border-warm-800/30 bg-[#1a1714]">
+      {/* Tab Bar — 滑動指示器 */}
+      <div ref={tabBarRef} className="relative flex overflow-x-auto border-b border-warm-800/30 bg-[#1a1714]">
         {tabs.map((tab) => (
           <button
             key={tab.id}
+            data-tab={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`flex shrink-0 items-center gap-1.5 px-4 py-3 text-sm font-medium transition-colors ${
+            className={`flex shrink-0 items-center gap-1.5 px-4 py-3 text-sm font-heading font-medium transition-colors ${
               activeTab === tab.id
-                ? 'border-b-2 border-primary-400 text-primary-400'
+                ? 'text-primary-400'
                 : 'text-warm-500 hover:text-warm-300'
             }`}
           >
@@ -114,10 +129,15 @@ export default function KitchenView({ t }: Props) {
             {tab.label}
           </button>
         ))}
+        {/* Sliding Indicator */}
+        <div
+          className="absolute bottom-0 h-[2px] bg-primary-400 transition-all duration-300 ease-out"
+          style={{ left: indicatorStyle.left, width: indicatorStyle.width }}
+        />
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-y-auto">
+      <div className="flex-1 overflow-y-auto animate-fade-in" key={activeTab}>
         {activeTab === 'orders' && <OrderBoard t={t} language={language} />}
         {activeTab === 'inventory' && <InventoryPanel t={t} language={language} />}
         {activeTab === 'menu' && <MenuEditor t={t} language={language} />}

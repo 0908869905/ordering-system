@@ -21,6 +21,8 @@ export default function QueueView({ t }: Props) {
 
   // Track completed orders for auto-calling
   const [calledOrders, setCalledOrders] = useState<Set<string>>(new Set())
+  // Track newly arrived number for animation
+  const [flashNumber, setFlashNumber] = useState<number | null>(null)
 
   const completedOrders = useMemo(
     () =>
@@ -49,6 +51,9 @@ export default function QueueView({ t }: Props) {
         playNotification()
         setTimeout(() => callNumber(order.orderNumber), 600)
         setCalledOrders((prev) => new Set(prev).add(order.id))
+        // Flash animation
+        setFlashNumber(order.orderNumber)
+        setTimeout(() => setFlashNumber(null), 2000)
         break // Only call one at a time
       }
     }
@@ -58,6 +63,8 @@ export default function QueueView({ t }: Props) {
     (orderNumber: number) => {
       playNotification()
       setTimeout(() => callNumber(orderNumber), 600)
+      setFlashNumber(orderNumber)
+      setTimeout(() => setFlashNumber(null), 2000)
     },
     [playNotification, callNumber]
   )
@@ -88,12 +95,12 @@ export default function QueueView({ t }: Props) {
           <ArrowLeft className="!size-5" />
           {t.back}
         </Button>
-        <Volume2 className="h-20 w-20 text-primary-400" />
-        <h1 className="font-decorative text-3xl tracking-[0.15em]">宏麵屋</h1>
-        <p className="text-center text-warm-500">
+        <Volume2 className="h-20 w-20 text-primary-400 animate-pulse-soft" />
+        <h1 className="font-decorative text-3xl tracking-[0.15em] ink-text">宏麵屋</h1>
+        <p className="text-center text-warm-500 font-heading">
           {t.soundEnabled}
         </p>
-        <Button size="xl" className="bg-accent-600 hover:bg-accent-700 text-white" onClick={unlockAudio}>
+        <Button size="xl" className="bg-accent-600 hover:bg-accent-700 text-white woodblock-shadow-accent" onClick={unlockAudio}>
           <Volume2 className="!size-6" />
           {t.confirm}
         </Button>
@@ -113,7 +120,7 @@ export default function QueueView({ t }: Props) {
         >
           <ArrowLeft />
         </Button>
-        <h1 className="font-decorative text-xl tracking-[0.15em] text-primary-400">
+        <h1 className="font-decorative text-xl tracking-[0.15em] text-primary-400 ink-text">
           宏麵屋
         </h1>
         <Button
@@ -140,7 +147,11 @@ export default function QueueView({ t }: Props) {
             <JapaneseFrame className="mt-4">
               <button
                 onClick={() => handleCallAgain(currentOrder.orderNumber)}
-                className="font-mono text-[120px] font-black leading-none text-emerald-400 animate-pulse-soft transition-transform hover:scale-105 active:scale-95 sm:text-[180px]"
+                className={`font-mono text-[120px] font-black leading-none transition-all hover:scale-105 active:scale-95 sm:text-[180px] ink-text ${
+                  flashNumber === currentOrder.orderNumber
+                    ? 'text-accent-500 animate-bounce-in'
+                    : 'text-emerald-400 animate-pulse-soft'
+                }`}
               >
                 {currentOrder.orderNumber}
               </button>
@@ -150,17 +161,18 @@ export default function QueueView({ t }: Props) {
           )}
         </div>
 
-        {/* Preparing */}
+        {/* Preparing — 燈籠意象 */}
         {preparingOrders.length > 0 && (
           <div className="w-full max-w-2xl">
-            <p className="mb-2 text-center font-heading text-sm text-warm-500">
+            <div className="brush-divider mb-3 mx-auto w-32" style={{ opacity: 0.3 }} />
+            <p className="mb-3 text-center font-heading text-sm text-warm-500">
               {t.preparingOrders}
             </p>
             <div className="flex flex-wrap justify-center gap-3">
               {preparingOrders.map((o) => (
                 <div
                   key={o.id}
-                  className="rounded-xl bg-amber-500/15 px-6 py-3 font-mono text-2xl font-bold text-amber-400"
+                  className="organic-radius bg-amber-500/15 px-6 py-3 font-mono text-2xl font-bold text-amber-400 border border-amber-500/20"
                 >
                   #{o.orderNumber}
                 </div>
@@ -172,7 +184,8 @@ export default function QueueView({ t }: Props) {
         {/* Recent Completed */}
         {recentCompleted.length > 0 && (
           <div className="w-full max-w-2xl">
-            <p className="mb-2 text-center font-heading text-sm text-warm-500">
+            <div className="brush-divider mb-3 mx-auto w-32" style={{ opacity: 0.3 }} />
+            <p className="mb-3 text-center font-heading text-sm text-warm-500">
               {t.recentCompleted}
             </p>
             <div className="flex flex-wrap justify-center gap-3">
@@ -180,7 +193,7 @@ export default function QueueView({ t }: Props) {
                 <button
                   key={o.id}
                   onClick={() => handleCallAgain(o.orderNumber)}
-                  className="rounded-xl bg-emerald-500/15 px-5 py-2 font-mono text-xl font-bold text-emerald-400 transition-transform hover:scale-105 active:scale-95"
+                  className="organic-radius-alt bg-emerald-500/15 px-5 py-2 font-mono text-xl font-bold text-emerald-400 border border-emerald-500/20 transition-transform hover:scale-105 active:scale-95"
                 >
                   #{o.orderNumber}
                 </button>

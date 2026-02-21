@@ -24,14 +24,14 @@ export default function Cart({ t, language, onClose, onSubmit }: Props) {
 
   if (items.length === 0) {
     return (
-      <div className="fixed inset-0 z-50 flex flex-col bg-warm-50">
-        <div className="flex items-center justify-between border-b border-warm-200 p-4">
-          <h2 className="font-heading text-lg font-bold">{t.cart}</h2>
+      <div className="fixed inset-0 z-50 flex flex-col bg-[#fdfcf8] animate-fade-in">
+        <div className="flex items-center justify-between border-b border-primary-200/40 p-4">
+          <h2 className="font-heading text-lg font-bold ink-text">{t.cart}</h2>
           <Button variant="ghost" size="icon" onClick={onClose}>
             <X />
           </Button>
         </div>
-        <div className="flex flex-1 items-center justify-center text-warm-500">
+        <div className="flex flex-1 items-center justify-center text-warm-500 font-heading">
           {t.cartEmpty}
         </div>
       </div>
@@ -39,10 +39,10 @@ export default function Cart({ t, language, onClose, onSubmit }: Props) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col bg-warm-50">
+    <div className="fixed inset-0 z-50 flex flex-col bg-[#fdfcf8] animate-fade-in">
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-warm-200 p-4">
-        <h2 className="font-heading text-lg font-bold">{t.cart}</h2>
+      <div className="flex items-center justify-between border-b border-primary-200/40 p-4">
+        <h2 className="font-heading text-lg font-bold ink-text">{t.cart}</h2>
         <div className="flex gap-2">
           <Button
             variant="ghost"
@@ -72,13 +72,13 @@ export default function Cart({ t, language, onClose, onSubmit }: Props) {
             return (
               <div
                 key={item.id}
-                className="rounded-lg border border-[hsl(var(--border))] p-3"
+                className="organic-radius border border-primary-200/60 bg-white p-3"
               >
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
-                    <h3 className="font-medium">{name}</h3>
+                    <h3 className="font-heading font-medium ink-text">{name}</h3>
                     {item.selectedOptions.length > 0 && (
-                      <p className="text-xs text-[hsl(var(--muted-foreground))]">
+                      <p className="text-xs text-warm-500 mt-0.5">
                         +{' '}
                         {item.selectedOptions
                           .map((o) => localized(language, o.name, o.nameEn))
@@ -86,7 +86,7 @@ export default function Cart({ t, language, onClose, onSubmit }: Props) {
                       </p>
                     )}
                     {item.notes && (
-                      <p className="text-xs text-[hsl(var(--muted-foreground))]">
+                      <p className="text-xs text-warm-500 italic mt-0.5">
                         {item.notes}
                       </p>
                     )}
@@ -100,25 +100,26 @@ export default function Cart({ t, language, onClose, onSubmit }: Props) {
                     <X className="!size-4" />
                   </Button>
                 </div>
-                <div className="mt-2 flex items-center justify-between">
+                <div className="brush-divider my-2 w-full" />
+                <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <Button
                       variant="outline"
                       size="icon"
-                      className="h-8 w-8"
+                      className="h-9 w-9 organic-radius"
                       onClick={() =>
                         updateQuantity(item.id, item.quantity - 1)
                       }
                     >
                       <Minus className="!size-3" />
                     </Button>
-                    <span className="w-6 text-center font-medium">
+                    <span className="w-8 text-center font-heading font-bold text-lg">
                       {item.quantity}
                     </span>
                     <Button
                       variant="outline"
                       size="icon"
-                      className="h-8 w-8"
+                      className="h-9 w-9 organic-radius"
                       onClick={() =>
                         updateQuantity(item.id, item.quantity + 1)
                       }
@@ -126,7 +127,7 @@ export default function Cart({ t, language, onClose, onSubmit }: Props) {
                       <Plus className="!size-3" />
                     </Button>
                   </div>
-                  <span className="font-bold">${item.subtotal}</span>
+                  <span className="font-heading font-bold text-accent-600">${item.subtotal}</span>
                 </div>
               </div>
             )
@@ -135,42 +136,43 @@ export default function Cart({ t, language, onClose, onSubmit }: Props) {
       </div>
 
       {/* Footer */}
-      <div className="border-t border-[hsl(var(--border))] p-4">
+      <div className="border-t border-primary-200/40 p-4 bg-[#fdfcf8]">
         {!showConfirm ? (
           <>
             <div className="mb-3 flex items-center justify-between text-lg">
-              <span className="font-medium">{t.total}</span>
+              <span className="font-heading font-medium">{t.total}</span>
               <span className="font-heading text-xl font-bold text-accent-600">
                 ${getTotal()}
               </span>
             </div>
             <Button
               size="lg"
-              className="w-full text-base"
+              className="w-full text-base woodblock-shadow-accent"
               onClick={() => setShowConfirm(true)}
             >
               {t.confirmOrder}
             </Button>
           </>
         ) : (
-          <>
-            <h3 className="mb-3 text-center text-lg font-bold">
+          <div className="animate-fade-in-up">
+            <h3 className="mb-3 text-center font-heading text-lg font-bold ink-text">
               {t.orderSummary}
             </h3>
-            <div className="mb-3 max-h-40 overflow-y-auto rounded-lg bg-[hsl(var(--secondary))] p-3 text-sm">
+            <div className="mb-3 max-h-40 overflow-y-auto organic-radius-alt bg-primary-50/50 p-3 text-sm border border-primary-200/40">
               {items.map((item) => (
                 <div key={item.id} className="flex justify-between py-1">
-                  <span>
+                  <span className="font-heading">
                     {localized(language, item.name, item.nameEn)}{' '}
                     x{item.quantity}
                   </span>
-                  <span>${item.subtotal}</span>
+                  <span className="font-heading">${item.subtotal}</span>
                 </div>
               ))}
-              <div className="mt-2 border-t border-[hsl(var(--border))] pt-2 font-bold">
+              <div className="brush-divider my-2 w-full" />
+              <div className="font-bold">
                 <div className="flex justify-between">
-                  <span>{t.total}</span>
-                  <span>${getTotal()}</span>
+                  <span className="font-heading">{t.total}</span>
+                  <span className="font-heading text-accent-600">${getTotal()}</span>
                 </div>
               </div>
             </div>
@@ -183,11 +185,11 @@ export default function Cart({ t, language, onClose, onSubmit }: Props) {
               >
                 {t.back}
               </Button>
-              <Button size="lg" className="flex-1 text-base" onClick={onSubmit}>
+              <Button size="lg" className="flex-1 text-base woodblock-shadow-accent" onClick={onSubmit}>
                 {t.submitOrder}
               </Button>
             </div>
-          </>
+          </div>
         )}
       </div>
     </div>

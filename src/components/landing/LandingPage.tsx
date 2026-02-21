@@ -14,7 +14,7 @@ export default function LandingPage({ t }: Props) {
   const { language, setLanguage } = useSettingsStore()
 
   return (
-    <div className="relative flex min-h-dvh flex-col items-center justify-center gap-8 p-6 no-select overflow-hidden">
+    <div className="washi-overlay relative flex min-h-dvh flex-col items-center justify-center gap-8 p-6 no-select overflow-hidden">
       {/* 青海波背景 */}
       <div className="seigaiha seigaiha-subtle seigaiha-animated absolute inset-0 pointer-events-none" />
 
@@ -24,20 +24,20 @@ export default function LandingPage({ t }: Props) {
         <SteamAnimation size="lg" className="animate-float" />
 
         {/* 書法字 Logo */}
-        <h1 className="font-decorative text-5xl tracking-[0.15em] text-warm-950">
+        <h1 className="font-decorative text-5xl tracking-[0.15em] text-warm-950 ink-text">
           宏麵屋
         </h1>
         {/* 英文副標題 */}
         <p className="font-heading text-xs tracking-[0.3em] uppercase text-warm-500">
           Hiromen-ya
         </p>
-        {/* 裝飾波浪線 */}
-        <div className="mt-3 h-[2px] w-20 bg-gradient-to-r from-transparent via-primary-400 to-transparent" />
+        {/* 毛筆分隔線 */}
+        <div className="brush-divider mt-3 w-24" />
       </div>
 
       {/* 按鈕區域 */}
       <div className="relative z-10 flex w-full max-w-sm flex-col gap-4 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
-        <Button asChild size="xl" className="w-full text-xl">
+        <Button asChild size="xl" className="w-full text-xl woodblock-shadow-accent">
           <a href="/customer.html">
             <LanternIcon className="!size-8" />
             {t.customerOrder}
@@ -51,7 +51,7 @@ export default function LandingPage({ t }: Props) {
         variant="ghost"
         size="sm"
         onClick={() => setLanguage(language === 'zh' ? 'en' : 'zh')}
-        className="relative z-10 mt-4 text-warm-600"
+        className="relative z-10 mt-4 text-warm-600 font-heading"
       >
         <Globe className="!size-4" />
         {language === 'zh' ? 'English' : '中文'}

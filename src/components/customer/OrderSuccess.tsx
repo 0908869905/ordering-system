@@ -21,42 +21,42 @@ export default function OrderSuccess({
   onBackToHome,
 }: Props) {
   return (
-    <div className="flex min-h-dvh flex-col items-center justify-center gap-6 p-6 text-center no-select">
+    <div className="washi-overlay flex min-h-dvh flex-col items-center justify-center gap-6 p-6 text-center no-select">
       {/* 拉麵碗 + 蒸氣 */}
       <div className="relative animate-fade-in">
         <SteamAnimation size="md" className="absolute -top-12 left-1/2 -translate-x-1/2" />
         <RamenBowlIcon size={80} className="text-primary-500" />
       </div>
 
-      <h1 className="font-heading text-2xl font-bold text-warm-950 animate-fade-in">
+      <h1 className="font-heading text-2xl font-bold text-warm-950 animate-fade-in ink-text">
         {t.orderSuccess}
       </h1>
 
-      {/* 號碼 */}
+      {/* 號碼 — 朱印風格 */}
       <div className="relative order-success-glow">
-        <div className="rounded-2xl bg-accent-600 px-12 py-8 text-white animate-bounce-in">
-          <p className="text-sm opacity-80">{t.yourNumber}</p>
-          <p className="font-mono text-7xl font-black">{orderNumber}</p>
+        <div className="animate-bounce-in border-4 border-accent-600 bg-[#fdfcf8] px-12 py-8 organic-radius" style={{ transform: 'rotate(-2deg)' }}>
+          <p className="text-sm text-accent-600/70 font-heading">{t.yourNumber}</p>
+          <p className="font-mono text-7xl font-black text-accent-600 ink-text">{orderNumber}</p>
         </div>
       </div>
 
       <WaveDivider variant="subtle" className="max-w-xs" />
 
-      <div className="font-heading text-xl font-bold text-accent-600">
+      <div className="font-heading text-xl font-bold text-accent-600 ink-text">
         {t.total}: ${totalAmount}
       </div>
 
-      <p className="text-warm-500">{t.pleasePayAt}</p>
+      <p className="text-warm-500 font-heading text-sm">{t.pleasePayAt}</p>
 
       <div className="flex w-full max-w-xs flex-col gap-3">
-        <Button size="lg" className="w-full" onClick={onContinue}>
+        <Button size="lg" className="w-full woodblock-shadow-accent" onClick={onContinue}>
           <ShoppingCart className="!size-5" />
           {t.continueShopping}
         </Button>
         <Button
           size="lg"
           variant="outline"
-          className="w-full"
+          className="w-full woodblock-shadow"
           onClick={onBackToHome}
         >
           <Home className="!size-5" />

@@ -36,15 +36,15 @@ export default function MenuGrid({ t, categories, items, language }: Props) {
 
   return (
     <>
-      {/* Category Tabs - 膠囊形 */}
-      <div className="sticky top-[57px] z-20 flex gap-2 overflow-x-auto border-b border-warm-200 bg-warm-50 px-4 py-2 scrollbar-hide">
+      {/* Category Tabs - 木札風格 */}
+      <div className="sticky top-[57px] z-20 flex gap-2 overflow-x-auto border-b border-primary-200/40 bg-warm-50 px-4 py-2 pb-0 scrollbar-hide">
         <button
           onClick={() => setSelectedCategory(null)}
           className={cn(
-            'touch-target shrink-0 rounded-full px-4 py-2 text-sm font-medium transition-colors',
+            'touch-target shrink-0 text-sm transition-all',
             selectedCategory === null
-              ? 'bg-primary-500 text-white'
-              : 'bg-warm-100 text-warm-700 hover:bg-warm-200'
+              ? 'wood-tag wood-tag-active'
+              : 'wood-tag opacity-70 hover:opacity-100'
           )}
         >
           {t.allCategories}
@@ -54,10 +54,10 @@ export default function MenuGrid({ t, categories, items, language }: Props) {
             key={cat.id}
             onClick={() => setSelectedCategory(cat.id)}
             className={cn(
-              'touch-target shrink-0 rounded-full px-4 py-2 text-sm font-medium transition-colors',
+              'touch-target shrink-0 text-sm transition-all',
               selectedCategory === cat.id
-                ? 'bg-primary-500 text-white'
-                : 'bg-warm-100 text-warm-700 hover:bg-warm-200'
+                ? 'wood-tag wood-tag-active'
+                : 'wood-tag opacity-70 hover:opacity-100'
             )}
           >
             {localized(language, cat.name, cat.nameEn)}
@@ -71,13 +71,13 @@ export default function MenuGrid({ t, categories, items, language }: Props) {
         <div className="p-4 space-y-6">
           {groupedItems.map((group) => (
             <div key={group.category.id}>
-              {/* 日式分類標題 */}
+              {/* 日式分類標題 — 毛筆線 */}
               <div className="flex items-center gap-3 mb-3">
-                <div className="h-px flex-1 bg-gradient-to-r from-transparent to-primary-200" />
-                <h2 className="font-heading text-lg font-semibold text-warm-800 shrink-0">
+                <div className="brush-divider flex-1" />
+                <h2 className="font-heading text-lg font-semibold text-warm-800 shrink-0 ink-text">
                   {localized(language, group.category.name, group.category.nameEn)}
                 </h2>
-                <div className="h-px flex-1 bg-gradient-to-l from-transparent to-primary-200" />
+                <div className="brush-divider flex-1" />
               </div>
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
                 {group.items.map((item) => (
