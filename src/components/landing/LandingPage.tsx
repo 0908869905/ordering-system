@@ -45,14 +45,6 @@ export default function LandingPage({ t }: Props) {
         </Button>
       </div>
 
-      {/* 營業中標示 */}
-      <div className="relative z-10 animate-fade-in" style={{ animationDelay: '0.5s' }}>
-        <div className="flex items-center gap-2 text-warm-500">
-          <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse-soft" />
-          <span className="font-heading text-xs tracking-wider">{language === 'zh' ? '營業中' : 'Now Open'}</span>
-        </div>
-      </div>
-
       {/* 語言切換 */}
       <Button
         variant="ghost"
@@ -63,16 +55,6 @@ export default function LandingPage({ t }: Props) {
         <Globe className="!size-4" />
         {language === 'zh' ? 'English' : '中文'}
       </Button>
-
-      {/* 員工快捷入口 */}
-      <div className="relative z-10 flex gap-6 animate-fade-in" style={{ animationDelay: '0.6s' }}>
-        <a href="/kitchen.html" className="text-xs text-warm-400 hover:text-primary-500 font-heading transition-colors">
-          {t.kitchenManage}
-        </a>
-        <a href="/queue.html" className="text-xs text-warm-400 hover:text-primary-500 font-heading transition-colors">
-          {t.queueDisplay}
-        </a>
-      </div>
 
       {/* 底部雲紋裝飾 */}
       <div className="absolute bottom-0 left-0 right-0 z-10">
