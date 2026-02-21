@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { cn, localized } from '@/lib/utils'
+import { localized } from '@/lib/utils'
 import type { Category, MenuItem, Language } from '@/types'
 import type { Translations } from '@/constants'
 import MenuItemCard from './MenuItemCard'
@@ -10,10 +10,10 @@ interface Props {
   categories: Category[]
   items: MenuItem[]
   language: Language
+  selectedCategory: string | null
 }
 
-export default function MenuGrid({ t, categories, items, language }: Props) {
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
+export default function MenuGrid({ t, categories, items, language, selectedCategory }: Props) {
   const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null)
 
   const sortedCategories = [...categories].sort((a, b) => a.order - b.order)
@@ -36,39 +36,6 @@ export default function MenuGrid({ t, categories, items, language }: Props) {
 
   return (
     <>
-      {/* Category Tabs - 木札風格 */}
-      <div className="sticky top-[57px] z-20 flex gap-2 overflow-x-auto border-b border-primary-200/40 bg-warm-50 px-4 py-2 pb-0 scrollbar-hide scroll-shadow-right">
-        <button
-          onClick={() => setSelectedCategory(null)}
-          className={cn(
-            'touch-target shrink-0 text-sm transition-all',
-            selectedCategory === null
-              ? 'wood-tag wood-tag-active'
-              : 'wood-tag opacity-70 hover:opacity-100'
-          )}
-        >
-          {t.allCategories}
-        </button>
-        {sortedCategories.map((cat) => {
-          const catItemCount = items.filter((i) => i.categoryId === cat.id).length
-          return (
-            <button
-              key={cat.id}
-              onClick={() => setSelectedCategory(cat.id)}
-              className={cn(
-                'touch-target shrink-0 text-sm transition-all',
-                selectedCategory === cat.id
-                  ? 'wood-tag wood-tag-active'
-                  : 'wood-tag opacity-70 hover:opacity-100'
-              )}
-            >
-              {localized(language, cat.name, cat.nameEn)}
-              <span className="ml-1 text-[10px] opacity-70">{catItemCount}</span>
-            </button>
-          )
-        })}
-      </div>
-
       {/* Items */}
       {groupedItems ? (
         // Show grouped by category with section titles

@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import { ArrowLeft, ShoppingCart, ChevronUp } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import { cn, localized } from '@/lib/utils'
 import { useSettingsStore } from '@/stores/useSettingsStore'
 import { useMenuStore } from '@/stores/useMenuStore'
 import { useCartStore } from '@/stores/useCartStore'
@@ -32,6 +33,7 @@ export default function CustomerView({ t }: Props) {
     totalAmount: number
   } | null>(null)
   const [showScrollTop, setShowScrollTop] = useState(false)
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
 
   // Toast notification state
   const [toast, setToast] = useState<{ message: string; visible: boolean } | null>(null)
@@ -104,28 +106,62 @@ export default function CustomerView({ t }: Props) {
 
   return (
     <div className="washi-overlay flex min-h-dvh flex-col no-select">
-      {/* Header */}
-      <header className="sticky top-0 z-30 flex items-center gap-3 border-b border-primary-200/40 bg-[#fdfcf8]/90 px-4 py-3 backdrop-blur">
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => window.location.href = '/'}
-        >
-          <ArrowLeft />
-        </Button>
-        <h1 className="flex-1 font-heading text-lg font-bold ink-text">{t.menu}</h1>
-        <span className="font-decorative text-sm text-primary-500 tracking-wider">宏麵屋</span>
-        {itemCount > 0 && (
-          <button
-            onClick={() => setShowCart(true)}
-            className="relative p-2 text-accent-600 transition-transform active:scale-90"
+      {/* Header + Category Tabs — 統一 sticky 區塊 */}
+      <header className="sticky top-0 z-30 bg-[#fdfcf8]/90 backdrop-blur border-b border-primary-200/40">
+        <div className="flex items-center gap-3 px-4 py-3">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => window.location.href = '/'}
           >
-            <ShoppingCart className="h-5 w-5" />
-            <span key={itemCount} className="absolute -top-0.5 -right-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-accent-600 text-[10px] font-bold text-white badge-pop">
-              {itemCount}
-            </span>
+            <ArrowLeft />
+          </Button>
+          <h1 className="flex-1 font-heading text-lg font-bold ink-text">{t.menu}</h1>
+          <span className="font-decorative text-sm text-primary-500 tracking-wider">宏麵屋</span>
+          {itemCount > 0 && (
+            <button
+              onClick={() => setShowCart(true)}
+              className="relative p-2 text-accent-600 transition-transform active:scale-90"
+            >
+              <ShoppingCart className="h-5 w-5" />
+              <span key={itemCount} className="absolute -top-0.5 -right-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-accent-600 text-[10px] font-bold text-white badge-pop">
+                {itemCount}
+              </span>
+            </button>
+          )}
+        </div>
+        {/* Category Tabs - 木札風格 */}
+        <div className="flex gap-2 overflow-x-auto px-4 py-2 pb-0 scrollbar-hide scroll-shadow-right">
+          <button
+            onClick={() => { setSelectedCategory(null); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
+            className={cn(
+              'touch-target shrink-0 text-sm transition-all',
+              selectedCategory === null
+                ? 'wood-tag wood-tag-active'
+                : 'wood-tag opacity-70 hover:opacity-100'
+            )}
+          >
+            {t.allCategories}
           </button>
-        )}
+          {[...categories].sort((a, b) => a.order - b.order).map((cat) => {
+            const catItemCount = items.filter((i) => i.categoryId === cat.id).length
+            return (
+              <button
+                key={cat.id}
+                onClick={() => { setSelectedCategory(cat.id); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
+                className={cn(
+                  'touch-target shrink-0 text-sm transition-all',
+                  selectedCategory === cat.id
+                    ? 'wood-tag wood-tag-active'
+                    : 'wood-tag opacity-70 hover:opacity-100'
+                )}
+              >
+                {localized(language, cat.name, cat.nameEn)}
+                <span className="ml-1 text-[10px] opacity-70">{catItemCount}</span>
+              </button>
+            )
+          })}
+        </div>
       </header>
 
       {/* Menu */}
@@ -135,6 +171,7 @@ export default function CustomerView({ t }: Props) {
           categories={categories}
           items={items}
           language={language}
+          selectedCategory={selectedCategory}
         />
       </div>
 
