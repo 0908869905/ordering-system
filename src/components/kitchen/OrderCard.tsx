@@ -88,15 +88,15 @@ export default function OrderCard({
             )
           })}
           {order.items.some((i) => i.notes) && (
-            <div className="mt-1">
+            <div className="mt-1 organic-radius bg-amber-500/10 border border-amber-500/20 px-2 py-1">
               {order.items
                 .filter((i) => i.notes)
                 .map((item, idx) => (
                   <p
                     key={idx}
-                    className="text-xs italic text-[hsl(var(--muted-foreground))]"
+                    className="text-xs italic text-amber-300 font-heading"
                   >
-                    {item.notes}
+                    📝 {item.notes}
                   </p>
                 ))}
             </div>

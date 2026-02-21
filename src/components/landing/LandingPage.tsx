@@ -58,11 +58,21 @@ export default function LandingPage({ t }: Props) {
         variant="ghost"
         size="sm"
         onClick={() => setLanguage(language === 'zh' ? 'en' : 'zh')}
-        className="relative z-10 mt-4 text-warm-600 font-heading"
+        className="relative z-10 text-warm-600 font-heading"
       >
         <Globe className="!size-4" />
         {language === 'zh' ? 'English' : '中文'}
       </Button>
+
+      {/* 員工快捷入口 */}
+      <div className="relative z-10 flex gap-6 animate-fade-in" style={{ animationDelay: '0.6s' }}>
+        <a href="/kitchen.html" className="text-xs text-warm-400 hover:text-primary-500 font-heading transition-colors">
+          {t.kitchenManage}
+        </a>
+        <a href="/queue.html" className="text-xs text-warm-400 hover:text-primary-500 font-heading transition-colors">
+          {t.queueDisplay}
+        </a>
+      </div>
 
       {/* 底部雲紋裝飾 */}
       <div className="absolute bottom-0 left-0 right-0 z-10">

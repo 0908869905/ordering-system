@@ -391,6 +391,22 @@ body {
   border: 2px solid rgba(255, 255, 255, 0.15);
 }
 
+/* 分類標籤捲動漸層提示 */
+.scroll-shadow-right {
+  position: relative;
+}
+.scroll-shadow-right::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 32px;
+  background: linear-gradient(90deg, transparent, var(--color-warm-50, #faf9f7));
+  pointer-events: none;
+  z-index: 1;
+}
+
 /* 暖簾波浪邊 */
 .noren-edge {
   position: relative;
@@ -722,6 +738,45 @@ body {
   0% { transform: scale(1); }
   50% { transform: scale(1.25); }
   100% { transform: scale(1); }
+}
+
+@keyframes confetti-1 {
+  0% { opacity: 1; transform: translate(0, 0) rotate(0deg); }
+  100% { opacity: 0; transform: translate(-40px, 120px) rotate(180deg); }
+}
+@keyframes confetti-2 {
+  0% { opacity: 1; transform: translate(0, 0) rotate(0deg); }
+  100% { opacity: 0; transform: translate(30px, 100px) rotate(-120deg); }
+}
+@keyframes confetti-3 {
+  0% { opacity: 1; transform: translate(0, 0) rotate(0deg); }
+  100% { opacity: 0; transform: translate(-20px, 140px) rotate(240deg); }
+}
+
+/* 慶祝紙片 */
+.confetti {
+  position: relative;
+}
+.confetti::before,
+.confetti::after {
+  content: '';
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 1px;
+  pointer-events: none;
+}
+.confetti::before {
+  top: -10px;
+  left: 20%;
+  background: var(--color-accent-400);
+  animation: confetti-1 1.5s ease-out 0.3s forwards;
+}
+.confetti::after {
+  top: -10px;
+  right: 25%;
+  background: var(--color-primary-400);
+  animation: confetti-2 1.5s ease-out 0.5s forwards;
 }
 
 /* 菜單卡片交錯入場 */

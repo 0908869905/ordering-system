@@ -33,7 +33,7 @@ export default function OrderSuccess({
       </h1>
 
       {/* 號碼 — 朱印風格 */}
-      <div className="relative order-success-glow">
+      <div className="relative order-success-glow confetti">
         <div className="animate-bounce-in border-4 border-accent-600 bg-[#fdfcf8] px-12 py-8 organic-radius" style={{ transform: 'rotate(-2deg)' }}>
           <p className="text-sm text-accent-600/70 font-heading">{t.yourNumber}</p>
           <p className="font-mono text-7xl font-black text-accent-600 ink-text">{orderNumber}</p>

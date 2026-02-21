@@ -37,7 +37,7 @@ export default function MenuGrid({ t, categories, items, language }: Props) {
   return (
     <>
       {/* Category Tabs - 木札風格 */}
-      <div className="sticky top-[57px] z-20 flex gap-2 overflow-x-auto border-b border-primary-200/40 bg-warm-50 px-4 py-2 pb-0 scrollbar-hide">
+      <div className="sticky top-[57px] z-20 flex gap-2 overflow-x-auto border-b border-primary-200/40 bg-warm-50 px-4 py-2 pb-0 scrollbar-hide scroll-shadow-right">
         <button
           onClick={() => setSelectedCategory(null)}
           className={cn(
