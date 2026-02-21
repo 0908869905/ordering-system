@@ -79,7 +79,7 @@ export default function OrderCard({
                 <span className="font-heading">
                   {name} x{item.quantity}
                   {item.selectedOptions.length > 0 && (
-                    <span className="ml-1 text-xs text-[hsl(var(--muted-foreground))]">
+                    <span className="ml-1 text-xs text-warm-500">
                       (
                       {item.selectedOptions
                         .map((o) => localized(language, o.name, o.nameEn))

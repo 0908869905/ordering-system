@@ -49,7 +49,7 @@ export default function Cart({ t, language, onClose, onSubmit }: Props) {
           <Button
             variant="ghost"
             size="sm"
-            className="text-[hsl(var(--destructive))]"
+            className="text-accent-600"
             onClick={() => {
               if (confirm(t.confirmClearCart)) {
                 clearCart()
@@ -96,7 +96,7 @@ export default function Cart({ t, language, onClose, onSubmit }: Props) {
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-8 w-8 text-[hsl(var(--destructive))]"
+                    className="h-8 w-8 text-accent-500 hover:text-accent-600"
                     onClick={() => removeItem(item.id)}
                   >
                     <X className="!size-4" />

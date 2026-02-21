@@ -91,7 +91,7 @@ export default function ItemDetail({ t, item, language, onClose }: Props) {
                   <button
                     key={option.id}
                     onClick={() => toggleOption(option)}
-                    className={`flex items-center justify-between organic-radius border-2 p-3 text-left transition-all ${
+                    className={`flex items-center justify-between organic-radius border-2 p-3 text-left transition-all active:scale-[0.97] ${
                       isSelected
                         ? 'border-primary-400 bg-primary-50 woodblock-shadow'
                         : 'border-warm-200 hover:border-primary-200'
