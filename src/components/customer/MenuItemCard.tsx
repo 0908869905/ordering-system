@@ -69,7 +69,12 @@ export default function MenuItemCard({ item, language, t, onClick }: Props) {
             </button>
           )}
           {item.options.length > 0 && !isSoldOut && (
-            <span className="text-xs text-warm-500 font-heading">
+            <span className="flex items-center gap-1 text-xs text-warm-500 font-heading">
+              <span className="flex gap-0.5">
+                {Array.from({ length: Math.min(item.options.length, 3) }).map((_, i) => (
+                  <span key={i} className="h-1 w-1 rounded-full bg-primary-400" />
+                ))}
+              </span>
               {t.options}
             </span>
           )}

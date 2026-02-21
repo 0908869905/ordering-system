@@ -21,6 +21,7 @@ export default function Cart({ t, language, onClose, onSubmit }: Props) {
   const getTotal = useCartStore((s) => s.getTotal)
 
   const [showConfirm, setShowConfirm] = useState(false)
+  const [showClearConfirm, setShowClearConfirm] = useState(false)
 
   if (items.length === 0) {
     return (
@@ -50,12 +51,7 @@ export default function Cart({ t, language, onClose, onSubmit }: Props) {
             variant="ghost"
             size="sm"
             className="text-accent-600"
-            onClick={() => {
-              if (confirm(t.confirmClearCart)) {
-                clearCart()
-                onClose()
-              }
-            }}
+            onClick={() => setShowClearConfirm(true)}
           >
             <Trash2 className="!size-4" />
             {t.clearCart}
@@ -194,6 +190,37 @@ export default function Cart({ t, language, onClose, onSubmit }: Props) {
           </div>
         )}
       </div>
+
+      {/* Clear Cart Confirmation Overlay */}
+      {showClearConfirm && (
+        <div className="absolute inset-0 z-10 flex items-center justify-center bg-warm-950/40 backdrop-blur-sm animate-fade-in">
+          <div className="organic-radius bg-[#fdfcf8] border border-primary-200/60 p-6 mx-6 max-w-sm w-full woodblock-shadow text-center animate-bounce-in">
+            <Trash2 className="mx-auto h-8 w-8 text-accent-500 mb-3" />
+            <p className="font-heading font-medium ink-text mb-4">{t.confirmClearCart}</p>
+            <div className="flex gap-2">
+              <Button
+                variant="outline"
+                size="lg"
+                className="flex-1"
+                onClick={() => setShowClearConfirm(false)}
+              >
+                {t.back}
+              </Button>
+              <Button
+                variant="destructive"
+                size="lg"
+                className="flex-1"
+                onClick={() => {
+                  clearCart()
+                  onClose()
+                }}
+              >
+                {t.clearCart}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

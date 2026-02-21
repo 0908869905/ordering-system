@@ -6,6 +6,7 @@ import { useSound } from '@/hooks/useSound'
 import { useSpeech } from '@/hooks/useSpeech'
 import JapaneseFrame from '@/components/shared/JapaneseFrame'
 import CloudDivider from '@/components/shared/CloudDivider'
+import SteamAnimation from '@/components/shared/SteamAnimation'
 import type { Translations } from '@/constants'
 
 interface Props {
@@ -160,7 +161,11 @@ export default function QueueView({ t }: Props) {
               </button>
             </JapaneseFrame>
           ) : (
-            <p className="mt-4 font-heading text-4xl text-warm-700">{t.noCurrentOrder}</p>
+            <div className="mt-4 flex flex-col items-center gap-3">
+              <SteamAnimation size="sm" className="text-warm-700/50" />
+              <p className="font-heading text-3xl text-warm-700">{t.noCurrentOrder}</p>
+              <div className="brush-divider w-24" style={{ opacity: 0.15 }} />
+            </div>
           )}
         </div>
 
@@ -170,6 +175,9 @@ export default function QueueView({ t }: Props) {
             <div className="brush-divider mb-3 mx-auto w-32" style={{ opacity: 0.3 }} />
             <p className="mb-3 text-center font-heading text-sm text-warm-500">
               {t.preparingOrders}
+              <span className="ml-2 inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-amber-500/20 px-1.5 text-[10px] font-bold text-amber-400 font-mono">
+                {preparingOrders.length}
+              </span>
             </p>
             <div className="flex flex-wrap justify-center gap-3">
               {preparingOrders.map((o, idx) => (
