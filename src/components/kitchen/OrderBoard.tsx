@@ -70,9 +70,10 @@ export default function OrderBoard({ t, language }: Props) {
             />
           ))}
           {unpaidOrders.length === 0 && (
-            <p className="py-8 text-center text-sm font-heading text-warm-600">
-              {t.noData}
-            </p>
+            <div className="py-8 text-center">
+              <div className="brush-divider mx-auto w-16 mb-3" style={{ opacity: 0.2 }} />
+              <p className="text-sm font-heading text-warm-600">{t.noData}</p>
+            </div>
           )}
         </div>
       </div>

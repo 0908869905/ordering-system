@@ -49,20 +49,24 @@ export default function MenuGrid({ t, categories, items, language }: Props) {
         >
           {t.allCategories}
         </button>
-        {sortedCategories.map((cat) => (
-          <button
-            key={cat.id}
-            onClick={() => setSelectedCategory(cat.id)}
-            className={cn(
-              'touch-target shrink-0 text-sm transition-all',
-              selectedCategory === cat.id
-                ? 'wood-tag wood-tag-active'
-                : 'wood-tag opacity-70 hover:opacity-100'
-            )}
-          >
-            {localized(language, cat.name, cat.nameEn)}
-          </button>
-        ))}
+        {sortedCategories.map((cat) => {
+          const catItemCount = items.filter((i) => i.categoryId === cat.id).length
+          return (
+            <button
+              key={cat.id}
+              onClick={() => setSelectedCategory(cat.id)}
+              className={cn(
+                'touch-target shrink-0 text-sm transition-all',
+                selectedCategory === cat.id
+                  ? 'wood-tag wood-tag-active'
+                  : 'wood-tag opacity-70 hover:opacity-100'
+              )}
+            >
+              {localized(language, cat.name, cat.nameEn)}
+              <span className="ml-1 text-[10px] opacity-70">{catItemCount}</span>
+            </button>
+          )
+        })}
       </div>
 
       {/* Items */}

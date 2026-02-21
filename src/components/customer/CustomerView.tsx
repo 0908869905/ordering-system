@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
-import { ArrowLeft, ShoppingCart } from 'lucide-react'
+import { ArrowLeft, ShoppingCart, ChevronUp } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { useSettingsStore } from '@/stores/useSettingsStore'
@@ -31,6 +31,7 @@ export default function CustomerView({ t }: Props) {
     orderNumber: number
     totalAmount: number
   } | null>(null)
+  const [showScrollTop, setShowScrollTop] = useState(false)
 
   // Toast notification state
   const [toast, setToast] = useState<{ message: string; visible: boolean } | null>(null)
@@ -39,6 +40,15 @@ export default function CustomerView({ t }: Props) {
     setToast({ message, visible: true })
     setTimeout(() => setToast((prev) => prev ? { ...prev, visible: false } : null), 1800)
     setTimeout(() => setToast(null), 2100)
+  }, [])
+
+  // Show scroll-to-top button after scrolling down
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollTop(window.scrollY > 400)
+    }
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
   // Listen for cart additions via ref tracking
@@ -143,6 +153,16 @@ export default function CustomerView({ t }: Props) {
           onClose={() => setShowCart(false)}
           onSubmit={handleSubmitOrder}
         />
+      )}
+
+      {/* Scroll to top */}
+      {showScrollTop && !showCart && (
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="fixed bottom-20 right-4 z-40 flex h-10 w-10 items-center justify-center rounded-full bg-primary-500/90 text-white shadow-lg backdrop-blur transition-all hover:bg-primary-600 active:scale-90 animate-fade-in"
+        >
+          <ChevronUp className="h-5 w-5" />
+        </button>
       )}
 
       {/* Toast Notification */}

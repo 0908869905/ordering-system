@@ -71,6 +71,12 @@ export default function ItemDetail({ t, item, language, onClose }: Props) {
           </p>
         )}
 
+        {item.stock > 0 && item.stock <= 5 && (
+          <p className="text-xs text-amber-600 font-heading animate-fade-in">
+            {language === 'zh' ? `僅剩 ${item.stock} 份` : `Only ${item.stock} left`}
+          </p>
+        )}
+
         {/* Options */}
         {item.options.length > 0 && (
           <div>

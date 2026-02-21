@@ -90,25 +90,25 @@ export default function ConnectionStatus({
       </button>
 
       <Dialog open={showDialog} onOpenChange={setShowDialog}>
-        <DialogContent className="max-w-sm">
+        <DialogContent className="max-w-sm dark bg-[#2e2a22] border-warm-700/30 text-warm-100">
           <DialogHeader>
-            <DialogTitle>{t.connect}</DialogTitle>
-            <DialogDescription>{t.deviceId}</DialogDescription>
+            <DialogTitle className="text-primary-400">{t.connect}</DialogTitle>
+            <DialogDescription className="text-warm-500">{t.deviceId}</DialogDescription>
           </DialogHeader>
 
           <div className="flex flex-col gap-4">
             {/* Status */}
             <div className="flex items-center gap-2">
               {connectionState === 'connected' && (
-                <Wifi className="h-5 w-5 text-[hsl(var(--success))]" />
+                <Wifi className="h-5 w-5 text-emerald-400" />
               )}
               {connectionState === 'connecting' && (
-                <Loader2 className="h-5 w-5 animate-spin text-[hsl(var(--warning))]" />
+                <Loader2 className="h-5 w-5 animate-spin text-amber-400" />
               )}
               {connectionState === 'disconnected' && (
-                <WifiOff className="h-5 w-5 text-gray-400" />
+                <WifiOff className="h-5 w-5 text-warm-500" />
               )}
-              <span className="font-medium">{stateText}</span>
+              <span className="font-heading font-medium">{stateText}</span>
               {isHost && (
                 <Badge variant="default" className="text-[10px]">
                   Host
@@ -119,17 +119,17 @@ export default function ConnectionStatus({
             {/* Peer ID */}
             {peerId && (
               <div className="flex items-center gap-2">
-                <code className="flex-1 overflow-hidden rounded bg-[hsl(var(--secondary))] px-2 py-1 font-mono text-xs text-ellipsis">
+                <code className="flex-1 overflow-hidden organic-radius bg-warm-900/50 px-2 py-1.5 font-mono text-xs text-warm-300 text-ellipsis">
                   {peerId}
                 </code>
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-8 w-8"
+                  className="h-8 w-8 text-warm-400"
                   onClick={handleCopyId}
                 >
                   {copied ? (
-                    <Check className="!size-4 text-[hsl(var(--success))]" />
+                    <Check className="!size-4 text-emerald-400" />
                   ) : (
                     <Copy className="!size-4" />
                   )}
@@ -138,7 +138,7 @@ export default function ConnectionStatus({
             )}
 
             {error && (
-              <p className="text-xs text-[hsl(var(--destructive))]">{error}</p>
+              <p className="text-xs text-accent-500 animate-fade-in">{error}</p>
             )}
 
             {connectionState === 'disconnected' && (
@@ -184,7 +184,7 @@ export default function ConnectionStatus({
             )}
 
             {/* Local mode info */}
-            <p className="text-center text-xs text-[hsl(var(--muted-foreground))]">
+            <p className="text-center text-xs text-warm-500 font-heading">
               {t.localMode}
             </p>
           </div>
