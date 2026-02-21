@@ -1,7 +1,8 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { Receipt } from 'lucide-react'
 import { useOrderStore } from '@/stores/useOrderStore'
 import OrderCard from './OrderCard'
+import ConfirmDialog from '@/components/shared/ConfirmDialog'
 import type { Language } from '@/types'
 import type { Translations } from '@/constants'
 
@@ -13,6 +14,8 @@ interface Props {
 export default function OrderBoard({ t, language }: Props) {
   const orders = useOrderStore((s) => s.orders)
   const updateOrderStatus = useOrderStore((s) => s.updateOrderStatus)
+
+  const [cancelTarget, setCancelTarget] = useState<string | null>(null)
 
   const unpaidOrders = useMemo(
     () => orders.filter((o) => o.status === 'created').sort((a, b) => a.createdAt - b.createdAt),
@@ -89,11 +92,7 @@ export default function OrderBoard({ t, language }: Props) {
               }}
               secondaryAction={{
                 label: t.markCancelled,
-                onClick: () => {
-                  if (confirm(t.confirmCancel)) {
-                    updateOrderStatus(order.id, 'cancelled')
-                  }
-                },
+                onClick: () => setCancelTarget(order.id),
                 variant: 'destructive',
               }}
             />
@@ -171,6 +170,15 @@ export default function OrderBoard({ t, language }: Props) {
         </div>
       </div>
     </div>
+
+      <ConfirmDialog
+        open={!!cancelTarget}
+        message={t.confirmCancel}
+        confirmLabel={t.confirm}
+        cancelLabel={t.back}
+        onConfirm={() => { if (cancelTarget) updateOrderStatus(cancelTarget, 'cancelled'); setCancelTarget(null) }}
+        onCancel={() => setCancelTarget(null)}
+      />
     </div>
   )
 }

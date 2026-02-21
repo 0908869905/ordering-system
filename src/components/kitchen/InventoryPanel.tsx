@@ -3,6 +3,7 @@ import { Package, RotateCcw } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
+import ConfirmDialog from '@/components/shared/ConfirmDialog'
 import { useMenuStore } from '@/stores/useMenuStore'
 import { localized } from '@/lib/utils'
 import type { Language } from '@/types'
@@ -28,6 +29,7 @@ export default function InventoryPanel({ t, language }: Props) {
     useMenuStore()
   const [editingId, setEditingId] = useState<string | null>(null)
   const [editValue, setEditValue] = useState('')
+  const [showResetConfirm, setShowResetConfirm] = useState(false)
 
   const sortedCategories = [...categories].sort((a, b) => a.order - b.order)
 
@@ -49,11 +51,7 @@ export default function InventoryPanel({ t, language }: Props) {
         <Button
           variant="outline"
           size="sm"
-          onClick={() => {
-            if (confirm(t.confirmResetInventory)) {
-              resetAllStock()
-            }
-          }}
+          onClick={() => setShowResetConfirm(true)}
         >
           <RotateCcw className="!size-4" />
           {t.resetAll}
@@ -161,6 +159,15 @@ export default function InventoryPanel({ t, language }: Props) {
           </div>
         )
       })}
+
+      <ConfirmDialog
+        open={showResetConfirm}
+        message={t.confirmResetInventory}
+        confirmLabel={t.confirm}
+        cancelLabel={t.back}
+        onConfirm={() => { resetAllStock(); setShowResetConfirm(false) }}
+        onCancel={() => setShowResetConfirm(false)}
+      />
     </div>
   )
 }

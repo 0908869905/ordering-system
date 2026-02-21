@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Volume2, VolumeX, RotateCcw, Key, Store } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import ConfirmDialog from '@/components/shared/ConfirmDialog'
 import { useSettingsStore } from '@/stores/useSettingsStore'
 import { useOrderStore } from '@/stores/useOrderStore'
 import { hashPassword, generateSalt, MIN_PASSWORD_LENGTH } from '@/lib/crypto'
@@ -44,6 +45,7 @@ export default function KitchenSettings({ t }: Props) {
   const [confirmPwd, setConfirmPwd] = useState('')
   const [pwdError, setPwdError] = useState('')
   const [pwdSuccess, setPwdSuccess] = useState(false)
+  const [pendingAction, setPendingAction] = useState<{ message: string; action: () => void } | null>(null)
 
   const handleSaveStallName = () => {
     if (editStallName.trim()) {
@@ -186,9 +188,7 @@ export default function KitchenSettings({ t }: Props) {
             variant="outline"
             size="sm"
             className="border-warm-600/30 text-warm-300 hover:text-accent-400 hover:border-accent-500/30"
-            onClick={() => {
-              if (confirm(t.confirmResetOrders)) resetOrders()
-            }}
+            onClick={() => setPendingAction({ message: t.confirmResetOrders, action: resetOrders })}
           >
             {t.resetOrders}
           </Button>
@@ -196,14 +196,20 @@ export default function KitchenSettings({ t }: Props) {
             variant="outline"
             size="sm"
             className="border-warm-600/30 text-warm-300 hover:text-accent-400 hover:border-accent-500/30"
-            onClick={() => {
-              if (confirm(t.confirmResetCounter)) resetCounter()
-            }}
+            onClick={() => setPendingAction({ message: t.confirmResetCounter, action: resetCounter })}
           >
             {t.resetCounter}
           </Button>
         </div>
       </div>
+      <ConfirmDialog
+        open={!!pendingAction}
+        message={pendingAction?.message ?? ''}
+        confirmLabel={t.confirm}
+        cancelLabel={t.back}
+        onConfirm={() => { pendingAction?.action(); setPendingAction(null) }}
+        onCancel={() => setPendingAction(null)}
+      />
     </div>
   )
 }

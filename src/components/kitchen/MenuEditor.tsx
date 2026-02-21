@@ -9,6 +9,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from '@/components/ui/dialog'
+import ConfirmDialog from '@/components/shared/ConfirmDialog'
 import { useMenuStore } from '@/stores/useMenuStore'
 import { generateId, localized } from '@/lib/utils'
 import type { Category, MenuItem, MenuOption, Language } from '@/types'
@@ -55,6 +56,8 @@ export default function MenuEditor({ t, language }: Props) {
   const [newOptName, setNewOptName] = useState('')
   const [newOptNameEn, setNewOptNameEn] = useState('')
   const [newOptPrice, setNewOptPrice] = useState('')
+
+  const [pendingDelete, setPendingDelete] = useState<{ message: string; action: () => void } | null>(null)
 
   const sortedCategories = [...categories].sort((a, b) => a.order - b.order)
 
@@ -178,11 +181,7 @@ export default function MenuEditor({ t, language }: Props) {
                   variant="ghost"
                   size="icon"
                   className="h-8 w-8 text-warm-400 hover:text-accent-400"
-                  onClick={() => {
-                    if (confirm(t.confirmDeleteCategory)) {
-                      deleteCategory(cat.id)
-                    }
-                  }}
+                  onClick={() => setPendingDelete({ message: t.confirmDeleteCategory, action: () => deleteCategory(cat.id) })}
                 >
                   <Trash2 className="!size-3.5" />
                 </Button>
@@ -220,11 +219,7 @@ export default function MenuEditor({ t, language }: Props) {
                         variant="ghost"
                         size="icon"
                         className="h-8 w-8 text-warm-400 hover:text-accent-400"
-                        onClick={() => {
-                          if (confirm(t.confirmDeleteItem)) {
-                            deleteItem(item.id)
-                          }
-                        }}
+                        onClick={() => setPendingDelete({ message: t.confirmDeleteItem, action: () => deleteItem(item.id) })}
                       >
                         <Trash2 className="!size-3.5" />
                       </Button>
@@ -274,6 +269,15 @@ export default function MenuEditor({ t, language }: Props) {
           </div>
         </DialogContent>
       </Dialog>
+
+      <ConfirmDialog
+        open={!!pendingDelete}
+        message={pendingDelete?.message ?? ''}
+        confirmLabel={t.confirm}
+        cancelLabel={t.back}
+        onConfirm={() => { pendingDelete?.action(); setPendingDelete(null) }}
+        onCancel={() => setPendingDelete(null)}
+      />
 
       {/* Item Dialog */}
       <Dialog
